@@ -1,0 +1,127 @@
+
+
+
+
+//formulaire de connexion
+$widthContainForm:100%;
+$RadiusContainForm:3px;
+
+
+
+
+
+
+    .body-form{
+
+
+
+        width: $widthContainForm;
+
+        .error_login{
+
+            color:red;
+            text-align:center;
+        }
+
+
+
+    }
+    .body-form form{
+        width: 100%;
+        margin:auto;
+    }
+
+    .body-form .form-group{
+
+        margin: 15px auto;
+        border-top: none;
+
+
+        width: 80%;
+        position:relative;
+
+    }
+
+    .form-group input{
+
+        width:100%;
+        margin:auto;
+
+        font-size: 0.8em;
+        border:none;
+        box-shadow:0 1px 0 #d4dae3;
+        transition: box-shadow .3s ease-out;
+
+        padding:15px 15px 3px 0;
+        color: rgba(43,42,41,0.9);
+
+
+
+
+        /*box-shadow:0 1px 0 #d4dae3;*/
+        /*transition:box-shadow .3s ease-out;*/
+
+
+
+
+
+
+    }
+
+.form-control{
+
+    border-radius: 0px;
+}
+    .form-control:focus{
+
+        background-color: transparent;
+        box-shadow:0 2px 0 #97a5ba;
+        border:transparent;
+
+    }
+
+
+    .floating-label{
+
+        position: absolute;
+        top:6px;
+        left:10px;
+        right: 0;
+        bottom: 0;
+        color:#575757;
+        transition:all .2s ease-out;
+
+
+
+    }
+
+    .btn-auth{
+
+        h5{
+            font-size:1rem;
+            margin:0;
+        }
+    }
+
+    .checkbox-text{
+        color:#575757;
+        font-size: 0.8rem;
+
+    }
+
+
+    .errors-login {
+
+      margin:auto;
+      width:80%;
+      color:red;
+    }
+    /*
+*/
+
+
+
+
+
+    //boutton pour slider vers l'inscription page
+

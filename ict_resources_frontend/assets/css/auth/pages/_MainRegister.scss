@@ -1,0 +1,34 @@
+//inclusion de la navigation partagé avec la page incription
+
+
+
+
+
+
+    .body-form{
+
+
+        .group-register-submit{
+
+            margin:20px auto;
+            width: 90%;
+            cursor: pointer;
+
+        }
+
+        label{
+
+            font-size: 0.8em;
+            color:#585858;
+
+
+        }
+        label:hover{
+
+            color:$colorRose;
+            transition: color .3s;
+            cursor: pointer;
+        }
+    }
+
+

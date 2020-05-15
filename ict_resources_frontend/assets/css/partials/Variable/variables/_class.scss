@@ -1,0 +1,72 @@
+.pull-left{
+
+    float: left;
+}
+
+.pull-right{
+
+    float:right;
+}
+
+.container{
+
+    padding:0 15px;
+     max-width: 1050px;
+     margin: 0 auto;
+}
+.container-fluid{
+
+    width: 100%;
+
+}
+
+//Les formulaire
+
+
+// input
+.form-group-TheProgrammer{
+    margin-top: 18px;
+    margin-bottom: 18px;
+
+
+
+}
+.form-control-TheProgrammer{
+
+    border-top:none;
+    border-left:none;
+    border-right:none;
+    border-bottom: 1px solid rgba(91,90,90,0.3);
+
+    outline: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 0.8em;
+
+}
+.form-control-TheProgrammer::placeholder{
+
+        color: rgba(43,42,41,0.5);
+
+}
+
+// buttons
+
+.btn-pink-TheProgrammer{
+
+    padding:8px 20px;
+    color:white;
+    background-color:$colorRose;
+    border:1px;
+    border-radius: 3px;
+    font-size: 1em;
+}
+
+.btn-pink-TheProgrammer:hover{
+    
+    background-color: transparent;
+    border:1px solid $colorRose;
+    color:$colorRose;
+    cursor: pointer;
+    transition: background-color .3s;
+}
