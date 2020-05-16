@@ -1,0 +1,33 @@
+{
+    "name": "ict_resources",
+    "version": "1.0.0",
+    "description": "Ict resources for Uy1",
+    "author": "TheProgrammer",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate"
+    },
+    "dependencies": {
+        "@nuxtjs/auth": "^4.9.1",
+        "@nuxtjs/axios": "^5.9.7",
+        "@nuxtjs/proxy": "^1.3.3",
+        "bootstrap": "^4.4.1",
+        "bootstrap-vue": "^2.11.0",
+        "jquery": "^3.5.0",
+        "luxon": "^1.24.1",
+        "nuxt": "^2.12.2",
+        "popper.js": "^1.16.1",
+        "vue": "^2.6.10",
+        "vue-datetime": "^1.0.0-beta.13",
+        "vue-server-renderer": "^2.6.10",
+        "vue-template-compiler": "^2.6.10",
+        "vue-textarea-autosize": "^1.1.1",
+        "weekstart": "^1.0.1"
+    },
+    "devDependencies": {
+        "@nuxtjs/vuetify": "^1.11.2"
+    }
+}

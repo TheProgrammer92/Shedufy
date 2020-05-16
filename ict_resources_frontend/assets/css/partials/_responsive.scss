@@ -1,0 +1,136 @@
+@media (max-width:873px)
+{
+
+
+    .sidebar-image{
+        right:0;
+        left: unset;
+        transition: all .5s;
+    }
+    .sidebar{
+
+        right:0;
+        left: unset;
+        transition: right .5s;
+
+    }
+
+    .container-home{
+
+
+        margin:auto;
+
+        max-width:100%;
+
+
+        .main .recentProjet{
+            width: 100%;
+
+        }
+
+
+    }
+
+
+
+
+
+
+
+    .header-content-right{
+        display: none;
+    }
+
+    .header .header-replace-right{
+      display: flex;
+    }
+    /*
+
+    #footer{
+        position:relative;
+    }
+    */
+
+    //gestion des card
+
+
+    //main affiche des recent projet
+
+
+
+}
+
+
+
+
+@media screen  and (max-width: 837.895px){
+
+
+
+    .row-card{
+        .col-md-4 {
+
+            flex: auto;
+            max-width: 100%;
+
+            padding-left: 5px;
+        }
+
+
+
+    }
+
+
+
+    .header .header-content-right{
+        display: none;
+    }
+
+
+
+
+
+}
+
+@media(max-width: 1301.25px){
+
+    .main .recentProjet .col-md-3{
+
+        width: 38%;
+        margin-bottom:15px;
+        margin-left: 65px;
+    }
+    .wrapper-router-view .main .recentProjet {
+
+        justify-content: unset;
+
+    }
+}
+
+
+@media screen and (max-width: 1220px){
+
+    .row-main-global{
+
+        width:100%;
+        float:right;
+    }
+
+}
+
+
+
+
+
+@media screen and (max-width: 300px) {
+
+    .container-fluid {
+
+        width: 1000px !important;
+    }
+
+    body{
+
+        overflow-x: auto;
+    }
+}
