@@ -1,11 +1,32 @@
 import { nth, monthFormatter } from "./reserver.func.js"
 
+async function get_event(state) {
+
+
+    console.log("call get Event")
+
+    let data = (await state.$axios.get('api/resources/')).data
+
+    let dataEach = data.data
+
+    let events = []
+    dataEach.forEach(element => {
+
+        events.push(element)
+    })
+
+    return events
+
+
+}
+
 export const state = () => ({
 
 
     events: [],
     dialog: false,
     dialogDate: false,
+    dialogUpdate: false,
 
 
     eventInput: {
@@ -75,10 +96,14 @@ export const mutations = {
         this.selectedOpen = false,
             this.currentlyEditing = null
     },
-    async DELETE_EVENT(state, ev) {
-        await db.collection("calEvent").doc(ev).delete()
-        this.selectedOpen = false,
-            this.getEvents()
+    async DELETE_EVENT(state, id) {
+
+        console.log("je vais delete , selected id = ", id)
+        let data = (await this.$axios.delete('api/resources/' + id + '/')).data
+
+
+
+
     },
     SHOW_EVENT(state, { nativeEvent, event }) {
         const open = () => {
@@ -93,6 +118,11 @@ export const mutations = {
             open()
         }
         nativeEvent.stopPropagation()
+    },
+
+    SET_DIALOG_UPDATE(state) {
+        console.log("ayaaaaaaaaaa set dialog update")
+        state.dialogUpdate = !state.dialogUpdate
     },
 
 
@@ -123,10 +153,21 @@ export const actions = {
     },
     addEvent({ commit }, eventInput) {
         commit('ADD_EVENT', eventInput)
-        commit('GET_EVENTS')
+
     },
 
 
+    deleteEvent({ commit }, id) {
+        commit('DELETE_EVENT', id)
+    },
+
+
+
+
+    setDialogUpdate({ commit }) {
+
+        commit('SET_DIALOG_UPDATE')
+    },
 
 
     setDialogDate({ commit }, date) {
@@ -152,6 +193,7 @@ export const getters = {
     events: state => state.events,
     details: state => state.details,
     dialogDate: state => state.dialogDate,
+    dialogUpdate: state => state.dialogUpdate,
 
     dialog: state => state.dialog,
 

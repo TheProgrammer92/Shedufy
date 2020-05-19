@@ -7,7 +7,7 @@
 
   <h1>Bienvenue  {{user.username}}   😂😂😂😜</h1>
 
-
+  <update_date_component> </update_date_component>
 
 
 
@@ -18,9 +18,16 @@
 <script>
 
 
+
+import update_date_component from '~/components/resources/update_date_component.vue'
+
 export default {
 
   middleware: 'isauth',
+
+  components: {
+update_date_component
+  },
 
 
   mounted(){

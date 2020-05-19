@@ -20,5 +20,4 @@ class MeSerializer(serializers.ModelSerializer):
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['name','start', 'end', 'details','color']
-
+        fields = ['name', 'start', 'end', 'details', 'color', 'id']

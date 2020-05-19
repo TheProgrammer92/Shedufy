@@ -50,6 +50,7 @@
 
           <create_date_component > </create_date_component>
 
+            <update_date_component :selectedEvent="selectedEvent"> </update_date_component>
  
 
 
@@ -68,48 +69,7 @@
           @click:date="setDialog"
           @change="updateRange"
         ></v-calendar>
-        <v-menu
-          v-model="selectedOpen"
-          :close-on-content-click="false"
-          :activator="selectedElement"
-          full-width
-          offset-x
-        >
-          <v-card color="grey lighten-4" min-width="350px" flat>
-            <v-toolbar :color="selectedEvent.color" dark>
-              <v-btn @click="deleteEvent(selectedEvent.id)" icon>
-                <v-icon>mdi-delete</v-icon>
-              </v-btn>
-              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-              <div class="flex-grow-1"></div>
-            </v-toolbar>
-            <v-card-text>
-              <form v-if="currentlyEditing !== selectedEvent.id">
-                {{ selectedEvent.details }}
-             </form>
-              <form v-else>
-                <textarea-autosize
-                  v-model="selectedEvent.details"
-                  type="text"
-                  style="width: 100%"
-                  :min-height="100"
-                  placeholder="add note">
-                </textarea-autosize>
-              </form>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn text color="secondary" @click="selectedOpen = false">
-                close
-              </v-btn>
-              <v-btn v-if="currentlyEditing !== selectedEvent.id" text @click.prevent="editEvent(selectedEvent)">
-                edit
-              </v-btn>
-              <v-btn text v-else type="submit" @click.prevent="updateEvent(selectedEvent)">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-menu>
+        
       </v-sheet>
     </v-col>
   </v-row>
@@ -121,6 +81,7 @@
 
 import create_date_component from '~/components/resources/create_date_component.vue'
 import {mapActions, mapGetters} from "vuex"
+import update_date_component from '~/components/resources/update_date_component.vue'
 
   export default {
     data: () => ({
@@ -137,7 +98,7 @@ import {mapActions, mapGetters} from "vuex"
       end: null,
       selectedEvent: {},
       selectedElement: null,
-      selectedOpen: false,
+ 
       
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
@@ -153,12 +114,25 @@ import {mapActions, mapGetters} from "vuex"
 
     components: {
 
-        create_date_component
+        create_date_component,
+        update_date_component
     },
     computed: {
       ...mapGetters('resources/reserver', [
-     'events'
+     'events','dialogUpdate'
     ]),
+
+    selectedOpen: {
+        get () {
+            return this.dialogUpdate
+            },
+            set (value) {
+            this.setDialogUpdate()
+            }
+        }
+,
+
+    
       title () {
         const { start, end } = this
         if (!start || !end) {
@@ -199,7 +173,7 @@ import {mapActions, mapGetters} from "vuex"
 
     ...mapActions('resources/reserver', [
       
-      'setDialog' , 'getEvents'
+      'setDialog' , 'getEvents','setDialogUpdate'
 
 
     ]),
@@ -207,13 +181,7 @@ import {mapActions, mapGetters} from "vuex"
 
   
 
-    async deleteEvent (ev) {
-      
-      // await db.collection('calEvent').doc(ev).delete()
-      // this.selectedOpen = false
-      // this.getEvents()
-    },
-
+   
     async updateEvent (ev) {
       // await db.collection('calEvent').doc(this.currentlyEditing).update({
       //   details: ev.details
@@ -241,17 +209,18 @@ import {mapActions, mapGetters} from "vuex"
       next () {
         this.$refs.calendar.next()
       },
+
       showEvent ({ nativeEvent, event }) {
 
-          console.log("click ++ event")
+          console.log("click ++ event", event)
         const open = () => {
           this.selectedEvent = event
           this.selectedElement = nativeEvent.target
-          setTimeout(() => this.selectedOpen = true, 10)
+          setTimeout(() => this.setDialogUpdate(), 10)
         }
 
-        if (this.selectedOpen) {
-          this.selectedOpen = false
+        if (this.dialogUpdate) {
+          this.setDialogUpdate() 
           setTimeout(open, 10)
         } else {
           open()
@@ -259,6 +228,7 @@ import {mapActions, mapGetters} from "vuex"
 
         nativeEvent.stopPropagation()
       },
+
       updateRange ({ start, end }) {
 
 
@@ -281,5 +251,10 @@ import {mapActions, mapGetters} from "vuex"
           : `${a.getFullYear()}-${a.getMonth() + 1}-${a.getDate()}`
       },
     },
+
+    updated(){
+
+      console.log("updated ancien = ", this.selectedEvent)
+    }
   }
 </script>

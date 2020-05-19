@@ -1,3 +1,15 @@
+****COMMENT UTILISER L'APPLICATION***
+
+1: Apres , avoir, suivis, toute les étapes, ci dessous, et lancé l'application
+2: Creer un compte  a l'address http://localhost:3000/auth/register
+3: Se connecter 
+4: Aller a cette page http://localhost:3000/resources/reserver_schedule
+5: cliquer sur New Event et creer un emploie de temps
+6: Aussitot apres, avoir crée, et choisis, une couleur il s'affiche dans le tableau
+
+
+7: Vous verrez quelque photo de l'application dans le dossier  ***PHOTO**** 
+
 
 *********BACK-END***
 
