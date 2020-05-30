@@ -1,24 +1,6 @@
 import { nth, monthFormatter } from "./reserver.func.js"
 
-async function get_event(state) {
 
-
-    console.log("call get Event")
-
-    let data = (await state.$axios.get('api/resources/')).data
-
-    let dataEach = data.data
-
-    let events = []
-    dataEach.forEach(element => {
-
-        events.push(element)
-    })
-
-    return events
-
-
-}
 
 export const state = () => ({
 
@@ -34,21 +16,28 @@ export const state = () => ({
         details: "",
         start_date: "",
         color: "#1976D2",
-        end_date: ""
-    }
+        end_date: "",
+        id_classe: ""
+    },
+
+    tab_classe: [],
+    tab_equipment: []
 })
 
 
 export const mutations = {
 
 
-    async GET_EVENTS(state) {
+    async GET_EVENTS(state, id) {
 
-        console.log("call get Event")
+        console.log("avoir les event = ", id)
 
-        let data = (await this.$axios.get('api/resources/')).data
+        let data = (await this.$axios.get('api/resources/' + id + '/')).data
         state.events = []
         let dataEach = data.data
+
+
+        console.log("event sget =", dataEach)
 
 
         dataEach.forEach(element => {
@@ -57,7 +46,30 @@ export const mutations = {
         })
 
 
-        console.log("event = ", state.events)
+
+
+
+    },
+
+    async GET_CLASSES(state) {
+
+        let data = (await this.$axios.get('api/classe/')).data
+        state.tab_classe = []
+
+        state.tab_classe = data.data
+
+
+
+    },
+
+    async GET_EQUIPMENTS(state) {
+
+        let data = (await this.$axios.get('api/equipment/')).data
+        state.tab_equipment = []
+
+        state.tab_equipment = data.data
+
+        console.log("tab_equipment = ", state.tab_equipment)
 
     },
 
@@ -65,7 +77,6 @@ export const mutations = {
 
 
 
-        console.log("demare event", eventInput)
         if (eventInput.name && eventInput.start && eventInput.end && eventInput.details) {
             let data = (await this.$axios.post('api/resources/', eventInput)).data
 
@@ -89,16 +100,11 @@ export const mutations = {
         }
     },
 
-    async UPDATE_EVENT(state, ev) {
-        await db.collection('calEvent').doc(this.currentlyEditing).update({
-            details: ev.details
-        })
-        this.selectedOpen = false,
-            this.currentlyEditing = null
-    },
+
+
     async DELETE_EVENT(state, id) {
 
-        console.log("je vais delete , selected id = ", id)
+
         let data = (await this.$axios.delete('api/resources/' + id + '/')).data
 
 
@@ -121,14 +127,12 @@ export const mutations = {
     },
 
     SET_DIALOG_UPDATE(state) {
-        console.log("ayaaaaaaaaaa set dialog update")
         state.dialogUpdate = !state.dialogUpdate
     },
 
 
     SET_DIALOG_DATE(state, date) {
 
-        console.log("set me dialog date")
         state.dialogDate = true
         state.focus = date
     },
@@ -148,8 +152,24 @@ export const mutations = {
 
 export const actions = {
 
-    getEvents({ commit }) {
-        commit('GET_EVENTS')
+    //classe
+
+
+    getClasses({ commit }) {
+
+        commit('GET_CLASSES')
+    },
+
+    // equipement
+
+    getEquipments({ commit }) {
+
+        commit('GET_EQUIPMENTS')
+    },
+
+
+    getEvents({ commit }, id) {
+        commit('GET_EVENTS', id)
     },
     addEvent({ commit }, eventInput) {
         commit('ADD_EVENT', eventInput)
@@ -196,6 +216,8 @@ export const getters = {
     dialogUpdate: state => state.dialogUpdate,
 
     dialog: state => state.dialog,
+    tab_classe: state => state.tab_classe,
+    tab_equipment: state => state.tab_equipment,
 
     eventInput: state => state.eventInput
 

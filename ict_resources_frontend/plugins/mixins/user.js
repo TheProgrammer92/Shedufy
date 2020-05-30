@@ -1,24 +1,24 @@
 import Vue from 'vue';
 
 
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex';
 
 
 const Validation = {
 
-    install(Vue,options) {
+    install(Vue, options) {
 
         Vue.mixin({
-           computed: {
+            computed: {
 
-            ...mapGetters( {
+                ...mapGetters({
 
-                user:'user',
+                    user: 'user',
+                    is_teacher: 'is_teacher',
+                    authenticated: "authenticated",
 
-                authenticated:"authenticated",
-
-            })
-           }
+                })
+            }
         })
     }
 }

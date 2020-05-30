@@ -169,3 +169,16 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+
+
+
+#djoser
+
+DJOSER = {
+
+    'SERIALIZERS': {
+
+        'current_user': 'myresources.serializer.UserSerialiser',
+
+    },
+}

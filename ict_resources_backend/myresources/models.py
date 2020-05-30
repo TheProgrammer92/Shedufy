@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from rest_framework.authtoken.models import Token
+from django.utils.translation import gettext_lazy as _
 
 
 # Create your models here.
@@ -14,11 +15,13 @@ class TokenModel(models.Model):
     pass
 
 
-class userProfile(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    avatar = models.ImageField(blank=True, null=True, upload_to="users/avatars/")
+    is_teacher = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.password
+        return self.user.username
 
 
 class Adress(models.Model):
@@ -28,46 +31,35 @@ class Adress(models.Model):
     district = models.CharField(max_length=50)
 
 
+class Classe(models.Model):
+    code_classe = models.CharField(max_length=20, unique=True)
+
+
+class Equipment(models.Model):
+    equipment = models.CharField(max_length=50, unique=True)
+    number = models.IntegerField(blank=False, null=False)
+
+
 class Schedule(models.Model):
-    start = models.CharField(blank=False, null=False , max_length=255)
+    start = models.CharField(blank=False, null=False, max_length=255)
     end = models.CharField(blank=False, null=False, max_length=55)
     details = models.CharField(max_length=255, null=False, blank=False)
     name = models.CharField(max_length=255, null=False, blank=False)
     color = models.CharField(max_length=255, default="1976d2")
-
-
-class Classe(models.Model):
-    code_classe = models.CharField(max_length=10, unique=True)
-    schedule = models.OneToOneField(Schedule, on_delete=models.CASCADE)
+    id_classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
+    id_equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
 
 
 class Students(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     matricule = models.CharField(max_length=10, unique=True, blank=False)
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    date_of_birth = models.DateTimeField(default=timezone.now)
-    address = models.OneToOneField(Adress, on_delete=models.CASCADE)
-    classe = models.ForeignKey(Classe, on_delete=models.CASCADE)
+    is_student = models.BooleanField(default=False)
 
 
 class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     matricule = models.CharField(max_length=10, unique=True, blank=False)
-    name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=100)
-    date_naissance = models.DateTimeField(default=timezone.now)
-    adress = models.OneToOneField(Adress, on_delete=models.CASCADE)
-    schedule = models.OneToOneField(Schedule, on_delete=models.CASCADE)
-
-
-class Category(models.Model):
-    category_code = models.CharField(max_length=10, unique=True)
-    category_name = models.CharField(max_length=50)
-
-
-class Equipment(models.Model):
-    code_equipment = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=50)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    is_teacher = models.BooleanField(default=False)
 
 
 class Borrow(models.Model):
@@ -77,9 +69,9 @@ class Borrow(models.Model):
     equipment = models.ManyToManyField(Equipment)
 
 
-class Room(models.Model):
-    schedule = models.OneToOneField(Schedule, on_delete=models.CASCADE)
-    classe = models.ManyToManyField(Classe)
+class ReservationEquipment(models.Model):
+    id_equipment: Equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE, unique=True)
+    number = models.IntegerField(blank=False, null=False)
 
 
 class Course(models.Model):
@@ -110,8 +102,3 @@ class Dispense(models.Model):
 class Concern(models.Model):
     code_materiel = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     numero = models.ForeignKey(Borrowing, on_delete=models.CASCADE)
-
-
-class Shelter(models.Model):
-    id_room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    code_room = models.ForeignKey(Classe, on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app >
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -55,7 +55,8 @@
     <v-app-bar
       :clipped-left="clipped"
       fixed
-      app
+      app 
+      
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-btn
@@ -125,24 +126,27 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
+     
+       items: [
         {
           icon: 'mdi-apps',
           title: 'Welcome',
           to: '/'
         },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Accueil',
-          to: '/inspire'
-        },
+     
+      
+      {
+                icon: 'mdi-chart-bubble',
+                title: 'Profil',
+                to: '/users/profil'
+              },
 
         
         
         {
           icon: 'mdi-chart-bubble',
           title: 'Reservation',
-          to: '/resources/reserver_schedule'
+          to: '/resources/classe'
         }
       ],
       miniVariant: false,

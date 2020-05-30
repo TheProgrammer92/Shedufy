@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from myresources.models import userProfile
+from myresources.models import UserProfile
 from myresources.permission import IsOwnerProfileOrReadOnly
 from myresources.serializer import *
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -21,7 +21,7 @@ from rest_framework import viewsets
 
 
 class UserProfileListCreateView(ListCreateAPIView):
-    queryset = userProfile.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = userProfileSerializer
 
     def perform_create(self, serializer):
@@ -30,7 +30,7 @@ class UserProfileListCreateView(ListCreateAPIView):
 
 
 class userProfileDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = userProfile.objects.all()
+    queryset = UserProfile.objects.all()
     serializer_class = userProfileSerializer
     permission_classes = [ IsOwnerProfileOrReadOnly, IsAuthenticated ]
 
