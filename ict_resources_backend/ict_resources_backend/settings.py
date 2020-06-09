@@ -29,8 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
-
-INSTALLED_APPS = [
+DJANGO_APP = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+]
+
+THIRTY_PACKAGE = [
     'rest_framework',
 
     'djoser',
@@ -46,9 +48,17 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'debug_toolbar',
-    'myresources.apps.MyresourcesConfig'
 
 ]
+
+PROJECT_APP = [
+
+    'myresources.apps.MyresourcesConfig',
+    'myresources_profil'
+
+]
+
+INSTALLED_APPS = DJANGO_APP + THIRTY_PACKAGE + PROJECT_APP
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -113,6 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "myresources_profil.CustomUser"
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -135,13 +146,17 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
 
     ),
+
+  'DEFAULT_PAGINATION_CLASS':
+         'myresources.paginate.CustomPagination'
 }
 
-SIMPLE_JWT = {
-'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
-'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
- }
 
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+}
 
 # django cors header
 
@@ -170,15 +185,13 @@ INTERNAL_IPS = [
     # ...
 ]
 
-
-
-#djoser
+#----------------------- djoser--------------------
 
 DJOSER = {
 
     'SERIALIZERS': {
 
-        'current_user': 'myresources.serializer.UserSerialiser',
+        'current_user': 'myresources_profil.serializer.UserSerialiser',
 
     },
 }

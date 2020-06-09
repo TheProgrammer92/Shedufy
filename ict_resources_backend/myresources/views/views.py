@@ -1,60 +1,92 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
-from django.contrib.auth.models import User
+
 from rest_framework import status, permissions
 
 from rest_framework.generics import *
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from myresources.models import UserProfile
-from myresources.permission import IsOwnerProfileOrReadOnly
+from myresources.models import *
 from myresources.serializer import *
-from rest_framework_simplejwt.tokens import RefreshToken
-
-from rest_framework.authtoken.models import Token
-from djoser.serializers import *
-from rest_framework import viewsets
-
+from myresources.views.viewsets import ScheduleViewset
+from myresources_profil.serializer import *
 
 # Create your views here.
 
+from django.contrib.auth import get_user_model
 
-class UserProfileListCreateView(ListCreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = userProfileSerializer
-
-    def perform_create(self, serializer):
-        user = self.request.user
-        serializer.save(user=user)
+User = get_user_model()
 
 
-class userProfileDetailView(RetrieveUpdateDestroyAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = userProfileSerializer
-    permission_classes = [ IsOwnerProfileOrReadOnly, IsAuthenticated ]
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 1
+    page_size_query_param = 'page'
+    max_page_size = 1000
 
 
-class LogoutAndBlacklistRefreshTokenForUserView(APIView):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = ()
+class ClasseView(ListAPIView):
+    queryset = Classe.objects.all()
+    serializer_class = ClasseSerializer
 
-    def post(self, request):
-        refresh_token = request.data[ "refresh_token" ]
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
 
-        token = RefreshToken(refresh_token)
-        token.blacklist()
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({'data': serializer.data})
 
 
-class MeListView(ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = TokenSerializer
-    permission_classes = [ AllowAny ]
+class CategoryClassView(ListAPIView):
+    serializer_class = CategoryClassSerializer
+    queryset = CategoryClasse.objects.all()
 
     def get(self, request, *args, **kwargs):
-        queryset = Token.objects.all()
-        serializer = TokenSerializer(queryset, many=True)
+        queryset = self.filter_queryset(self.get_queryset())
+        tab_classe = []
+        for category in queryset:
+            classe = category.classe.all()
 
-        return Response(serializer.data)
+            tab_classe.append(classe)
 
+        serializer_classe = ClasseSerializer(tab_classe, many=True)
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response({'data': serializer.data})
+
+
+class CategoryClasseGetId(ListAPIView):
+    serializer_class = CategoryClassSerializer
+    queryset = CategoryClasse.objects.all()
+
+    def get(self, request, pk=None, *args, **kwargs):
+        queryset = CategoryClasse.objects.get(pk=pk)
+        tab_classe = queryset.classe.all()
+
+        serializer_classe = ClasseSerializer(tab_classe, many=True)
+
+        return Response({'data': serializer_classe.data})
+
+
+class GetCourse(ListAPIView):
+    serializer_class = CourseSerializer
+    queryset = Course.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'data': serializer.data})
+
+
+class GetCategoryCourse(ListAPIView):
+    serializer_class = CategoryCourseSerializer
+    queryset = CategoryCourse.objects.all()
+    pagination_class = StandardResultsSetPagination
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({'data': serializer.data})

@@ -5,7 +5,7 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      right
+      left
        :mini-variant="false"
 
     >
@@ -55,6 +55,12 @@
       </v-list>
 
 
+      <template v-slot:append>
+        <div class="pa-2" @click.prevent="logout">
+          <v-btn block>Se Deconnecter</v-btn>
+        </div>
+      </template>
+
     </v-navigation-drawer>
 
     <v-app-bar
@@ -70,7 +76,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
    <v-content>
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-content>

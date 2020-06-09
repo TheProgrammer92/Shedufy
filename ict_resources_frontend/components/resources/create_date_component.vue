@@ -39,11 +39,12 @@ export default {
 
         eventInput: {
 
-          name: '',
+          id_course: '',
           color: '#1976D2',
-          details :"",
           start: "",
-          end: ""
+          end: "",
+          id_equipment:"",
+          id_classe:''
         }
     }
   },

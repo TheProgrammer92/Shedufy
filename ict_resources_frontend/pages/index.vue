@@ -335,7 +335,7 @@ import update_date_component from '~/components/resources/update_date_component.
 export default {
 
   middleware: 'isauth',
-  layout: 'default-new'
+  layout: 'default'
 ,
   components: {
 update_date_component

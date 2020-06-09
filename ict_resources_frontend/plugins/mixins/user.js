@@ -16,6 +16,7 @@ const Validation = {
                     user: 'user',
                     is_teacher: 'is_teacher',
                     authenticated: "authenticated",
+                    is_admin: "is_admin"
 
                 })
             }

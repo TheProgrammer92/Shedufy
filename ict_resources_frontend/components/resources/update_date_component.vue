@@ -1,5 +1,10 @@
 <template>
+
+
   <div>
+
+    <dialog-message :dialog_message_teacher="dialog_message_teacher"></dialog-message>
+
     <v-row
       justify="center"
     >
@@ -69,21 +74,31 @@
     v-model="valid"
     lazy-validation
   >
-    <v-text-field
-      v-model="eventInput.name"
-      :counter="10"
-      label="Name"
-      required
-    ></v-text-field>
-
-    <v-text-field
-      v-model="eventInput.details"
    
-      label="Details"
-      required
-    >
+    <v-select
+        v-model="eventInput.id_course"
+        :items="tab_course_category"
+        filled
+        chips
+        color="blue-grey lighten-2"
+        label="Select"
+        item-text="name"
+        item-value="id"
+   
+
+
+        
+      >
+    <!-- Template for render selected data -->
+   
+    <!-- Template for render data when the select is expanded -->
+ 
+  </v-select>
+
+
+
     
-    </v-text-field>
+   
 
    <v-text-field
       v-model="eventInput.start"
@@ -111,9 +126,9 @@
     ></v-text-field>
 
      <v-select
-      item-text="code_classe"
+           item-text="code_classe"
               item-value="id"
-              :items="tab_classe"
+              :items="getClasseById()"
               filled
               label="Classe"
               v-model="eventInput.id_classe"
@@ -140,7 +155,7 @@
     <v-btn
       color="primary"
       class="mr-4"
-     @click.prevent="addEvent(eventInput)"
+     @click.prevent="addEvent"
     >
       Add
     </v-btn> 
@@ -213,6 +228,8 @@
 <script>
 
     import {mapActions, mapGetters} from 'vuex'
+
+    import dialogMessage from "~/components/alert/dialog_message.vue"
   export default {
 
     props:{
@@ -227,12 +244,14 @@
       return {
 
         eventInput: {
-            name: "",
-            details: "",
-            start_date: "",
+            
+            id_course: "",
+            start: "",
             color: "#1976D2",
-            end_date: "",
-            'id_classe':""
+            end: "",
+            id_classe:1,
+            id_equipment:"",
+            id_teacher:""
         },
         
     
@@ -244,17 +263,21 @@
         widgets:true,
         items: [], 
         valid: true,
-
+        dialog_message_teacher:false,
        
       
       }
+    },
+
+    components: {
+      dialogMessage
     },
 
   
   
      computed: {
       ...mapGetters('resources/reserver', [
-     'events','dialogUpdate','tab_classe', 'tab_equipment'
+     'events','dialogUpdate','tab_classe', 'tab_equipment', 'tab_classe_category_selected','tab_course_category'
     ]),
     
     dialog: {
@@ -276,19 +299,35 @@
                 ]),
 
 
+    getClasseById() {
 
-  async addEvent(eventInput) {
+        let id = this.$route.params.id
 
-    
+       let classe= this.tab_classe.filter(classe => classe.id == id)
+       
+       return classe
+        
+    },
+
+
+  async addEvent() {
+
+        let eventInput = this.eventInput
+        eventInput.id_teacher = this.user.id
+
   
-        if (eventInput.name && eventInput.start && eventInput.end && eventInput.details) {
+        if ( eventInput.start && eventInput.end && eventInput.id_course && eventInput.id_classe) {
+
+          console.log(eventInput)
             let data = (await this.$axios.post('api/resources/', eventInput)).data
 
             //   state.getEvents()
 
              this.getEvents(this.id_classe)
             
+            this.dialog_message_teacher =  !this.dialog_message_teacher
              this.setDialogUpdate()
+
 
         } else {
             alert('You must enter event name, start, and end time')
@@ -336,6 +375,8 @@
  
 
     },
+
+    
 
 
    

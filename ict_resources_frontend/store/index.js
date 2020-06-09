@@ -23,8 +23,16 @@ export const getters = {
 
 
 
-        let is_teacher = state.auth.user.is_staff == 1
+        let is_teacher = state.auth.user.is_teacher == 1
         return is_teacher
+    },
+
+    is_admin(state) {
+
+
+
+        let is_admin = state.auth.user.is_admin == 1 || state.auth.user.is_superuser == 1
+        return is_admin
     }
 }
 

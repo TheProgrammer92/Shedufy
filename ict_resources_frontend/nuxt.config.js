@@ -56,6 +56,7 @@ export default {
         '~/plugins/mixins/user',
         '~/plugins/vue/vueTextareaAutosize',
         '~/plugins/vue/main.js',
+        '~/plugins/vue/vue-notify',
 
     ],
 

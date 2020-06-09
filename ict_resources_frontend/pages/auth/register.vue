@@ -131,9 +131,8 @@
 
               try {
 
-                console.log(this)
+               
                 let response = await this.$axios.$post('http://localhost:8000/api/users/', this.data)
-                console.log("donnee retour",response)
 
                 this.$router.push({name :'auth-login'})
               } catch (err) {

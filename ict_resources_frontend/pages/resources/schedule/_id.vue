@@ -6,7 +6,7 @@
       <v-sheet height="64">
         <v-toolbar flat color="white">
 
-           <v-btn  v-if="is_teacher" color="primary" dark @click.stop="setDialogUpdate">
+           <v-btn  v-if="is_teacher || is_admin" color="primary" dark @click.stop="setDialogUpdate">
             New Event
           </v-btn>
           <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
@@ -56,7 +56,7 @@
  
 
 
-     <v-sheet height="1000">
+    <v-sheet height="100%" width="100%">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -64,6 +64,7 @@
           :events="events"
           :event-color="getEventColor"
           :event-margin-bottom="3"
+          :event-more-text = "'more text event'"
           :now="today"
           :type="type"
           @click:event="showEvent"
@@ -87,7 +88,6 @@ import update_date_component from '~/components/resources/update_date_component.
 
   export default {
 
-    layout: 'default-new',
 
     middleware: 'isauth',
     data: () => ({
@@ -103,27 +103,30 @@ import update_date_component from '~/components/resources/update_date_component.
       },
       start: null,
       end: null,
-      selectedEvent: {},
+      selectedEvent: {
+
+     
+        details: "",
+        start: "",
+        color: "#1976D2",
+        end: "",
+        id_classe: 1,
+        id_equipment: "",
+        id: ""
+      },
       selectedElement: null,
  
       
   
       currentlyEditing: null,
 
-      id_classe:2
+      id_classe:null,
+      id_cat:"",
+      is_modal:true,
+      
 
     }),
 
-
-    mounted() {
-
-
-        
-     
-      this.getClasses()
-      this.getEquipments()
-
-    },
 
     components: {
 
@@ -132,7 +135,7 @@ import update_date_component from '~/components/resources/update_date_component.
     },
     computed: {
       ...mapGetters('resources/reserver', [
-     'events','dialogUpdate'
+   'dialogUpdate', 'events'
     ]),
 
     selectedOpen: {
@@ -186,7 +189,7 @@ import update_date_component from '~/components/resources/update_date_component.
 
     ...mapActions('resources/reserver', [
       
-      'setDialog' , 'getEvents','setDialogUpdate', 'getClasses', 'getEquipments'
+      'setDialog' , 'getEvents','setDialogUpdate', 'getClasses', 'getEquipments' , 'getClasseCategoryId', 'getCourse'
 
 
     ]),
@@ -195,16 +198,7 @@ import update_date_component from '~/components/resources/update_date_component.
   
 
    
-    async updateEvent (ev) {
-      // await db.collection('calEvent').doc(this.currentlyEditing).update({
-      //   details: ev.details
-      // })
-      // this.selectedOpen = false
-      // this.currentlyEditing = null
-      // this.getEvents()
-    },
-
-
+ 
 
       viewDay ({ date }) {
         this.focus = date
@@ -225,22 +219,27 @@ import update_date_component from '~/components/resources/update_date_component.
 
       showEvent ({ nativeEvent, event }) {
 
-          if(this.is_teacher) {
+          // s'il es professeur seulement
 
-            const open = () => {
-          this.selectedEvent = event
-          this.selectedElement = nativeEvent.target
-          setTimeout(() => this.setDialogUpdate(), 10)
-          }
+         
+          if(this.is_teacher  || this.is_admin) {
 
-          if (this.dialogUpdate) {
-            this.setDialogUpdate() 
-            setTimeout(open, 10)
-          } else {
-            open()
-          }
+                const open = () => {
 
-          nativeEvent.stopPropagation()
+              this.selectedEvent = event
+            
+              this.selectedElement = nativeEvent.target
+              setTimeout(() => this.setDialogUpdate(), 10)
+              }
+
+              if (this.dialogUpdate) {
+                this.setDialogUpdate() 
+                setTimeout(open, 10)
+              } else {
+                open()
+              }
+
+              nativeEvent.stopPropagation()
 
             }
             else {
@@ -274,10 +273,31 @@ import update_date_component from '~/components/resources/update_date_component.
     },
 
     updated(){
-       
+
     this.id_classe= this.$route.params.id
-//this.getEvents(this.id_classe)
+      
   
-    }
+    },
+
+    
+    mounted() {
+
+    this.id_classe= this.$route.params.id
+
+     
+     
+    this.getEquipments()
+
+       this.getCourse()
+
+
+       this.getClasses()
+       console.log("id classe = ", this.id_classe)
+       this.getEvents(this.id_classe)
+
+    
+
+    },
+
   }
 </script>

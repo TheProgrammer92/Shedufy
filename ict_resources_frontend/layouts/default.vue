@@ -87,7 +87,7 @@
       </v-btn>
     </v-app-bar>
     <v-content>
-      <v-container>
+      <v-container fluid>
         <nuxt />
       </v-container>
     </v-content>
@@ -145,8 +145,18 @@ export default {
         
         {
           icon: 'mdi-chart-bubble',
-          title: 'Reservation',
+          title: 'Emploie de temps',
           to: '/resources/classe'
+        } ,
+        
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Reservation',
+          to: '/resources/reservation'
+        } ,{
+          icon: 'mdi-chart-bubble',
+          title: 'Mes Reservation',
+          to: '/resources/reservation/index-teacher'
         }
       ],
       miniVariant: false,

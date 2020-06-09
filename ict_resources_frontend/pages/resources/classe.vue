@@ -1,76 +1,66 @@
 <template>
+<v-container fluid class="pa-4 text-center">
 
-<v-row class="fill-height">
-  <v-card
-    :loading="loading"
-    class="mx-auto my-12"
-    max-width="374"
+
+
+
+
+    <v-row class="fill-height flex flex-column"  v-for="(category, index) in tab_category"  :key="index">
+
+    <h2 class="text-left">{{category.department_name}}</h2>
+
+       <v-row>
+
+
+      <!-- on verifie si la classe lié a la catérogry est dans le tableau des classe-->
+        <template v-for="(item, i) in tab_classe"   >
+        <v-col
+
+        v-if="category.classe.indexOf(item.id) !== -1" 
+          :key="i"
+          cols="12"
+          md="4"
+          
     
+          @click.prevent="showSchedule(item.id,category.id)"
+        >
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              :elevation="hover ? 12 : 2"
+              :class="{ 'on-hover': hover }"
+            >
+              <v-img
+                :src="img"
+                height="225px"
+              >
+                <v-card-title class="title white--text">
+                  <v-row
+                    class="fill-height flex-column"
+                    justify="space-between"
+                  >
+                    <p class="mt-4 subheading text-center">{{ item.code_classe }} id = {{item.id}}</p>
 
+                    <div>
+                      <p class="ma-0 body-1 font-weight-bold font-italic text-center">
+                        {{ item.code_classe }}
+                      </p>
+                      <p class="caption font-weight-medium font-italic text-left">
+                        {{ item.code_classe }}
+                      </p>
+                    </div>
 
-    v-for="(classe,id) in tab_classe"
-    :key="id"
-
-    @click.prevent="showSchedule(classe.id)"
-  >
-    <v-img
-      height="250"
-      src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-    ></v-img>
-
-    <v-card-title>{{classe.code_classe}}</v-card-title>
-
-    <v-card-text>
-      <v-row
-        align="center"
-        class="mx-0"
-      >
-        <v-rating
-          :value="4.5"
-          color="amber"
-          dense
-          half-increments
-          readonly
-          size="14"
-        ></v-rating>
-
-        <div class="grey--text ml-4">4.5 (413)</div>
-      </v-row>
-
-    
-   
-    </v-card-text>
-
-    <v-divider class="mx-4"></v-divider>
-
-
-    <v-card-text>
-      <v-chip-group
-        v-model="selection"
-        active-class="deep-purple accent-4 white--text"
-        column
-      >
-        <v-chip>5:30PM</v-chip>
-
-        <v-chip>7:30PM</v-chip>
-
-        <v-chip>8:00PM</v-chip>
-
-        <v-chip>9:00PM</v-chip>
-      </v-chip-group>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-btn
-        color="deep-purple lighten-2"
-        text
-        @click="reserve"
-      >
-        Reserve
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-   </v-row>
+                    
+                  </v-row>
+                </v-card-title>
+              </v-img>
+            </v-card>
+          </v-hover>
+        </v-col>
+      </template>
+       
+       </v-row>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -80,26 +70,39 @@ import {mapActions , mapGetters} from 'vuex'
 
 
 export default {
-    layout : 'default-new',
 
-    data: () => ({
-      loading: false,
-      selection: 1,
+   data() {
+     return {
 
       
-    }),
+          loading: false,
+          selection: 1,
+              img: 'https://www.bienenseigner.com/wp-content/uploads/2019/02/decoration-salle-de-classe-780x470.jpg',
+
+
+
+        
+          transparent: 'rgba(255, 255, 255, 0.1)',
+
+
+
+     
+      
+ 
+     }
+   },
 
     computed: {
 
         ...mapGetters('resources/reserver', [
-            'tab_classe'
+            'tab_classe', 'tab_category','tab_course_category',
         ])
     },
 
     methods: {
 
     ...mapActions('resources/reserver', [
-        'getClasses', 'getEvents'
+        'getClasses', 'getEvents' , 'getAllCategoryClasse','getClasseCategoryId','getCourse'
     ]),
 
       reserve () {
@@ -109,9 +112,17 @@ export default {
       },
 
 
-      showSchedule(id_classe) {
-    
+      showSchedule(id_classe,id_categ) {
+        
+
+        //on charge les eveement, les cours par categori et classe par categorie
+
+      
         this.getEvents(id_classe)
+        this.getClasseCategoryId(id_categ)
+        this.getCourse()
+
+
         this.$router.push({name:'resources-schedule-id', params: {id:id_classe}})
 
         
@@ -122,7 +133,11 @@ export default {
 
 
     this.getClasses()
+    this.getAllCategoryClasse()
       
+
+
+
 
         
     }
