@@ -59,7 +59,7 @@
 
 
                 <div class="form-group">
-                    <Button type="submit" class="submit">Valider</Button>
+                    <Button type="submit" class="submit">Se connecter</Button>
                 </div>
             </b-form>
 

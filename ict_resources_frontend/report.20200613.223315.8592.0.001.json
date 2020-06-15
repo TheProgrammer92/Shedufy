@@ -4,10 +4,10 @@
     "reportVersion": 2,
     "event": "Allocation failed - JavaScript heap out of memory",
     "trigger": "FatalError",
-    "filename": "report.20200609.092701.10356.0.001.json",
-    "dumpEventTime": "2020-06-09T09:27:01Z",
-    "dumpEventTimeStamp": "1591691221021",
-    "processId": 10356,
+    "filename": "report.20200613.223315.8592.0.001.json",
+    "dumpEventTime": "2020-06-13T22:33:15Z",
+    "dumpEventTimeStamp": "1592083995506",
+    "processId": 8592,
     "threadId": null,
     "cwd": "F:\\laragon\\www\\django\\ICT-Resources\\ict_resources_frontend",
     "commandLine": [
@@ -51,74 +51,74 @@
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 1999812,
+        "user": 3195640,
         "nice": 0,
-        "sys": 2212656,
-        "idle": 51413296,
-        "irq": 309046
+        "sys": 3782125,
+        "idle": 45727187,
+        "irq": 700781
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 1253015,
+        "user": 2120078,
         "nice": 0,
-        "sys": 1594656,
-        "idle": 52777859,
-        "irq": 12984
+        "sys": 1778125,
+        "idle": 48806515,
+        "irq": 23093
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 3359796,
+        "user": 3845875,
         "nice": 0,
-        "sys": 8726796,
-        "idle": 43538937,
-        "irq": 15703
+        "sys": 3891671,
+        "idle": 44967171,
+        "irq": 26250
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 1754218,
+        "user": 5688109,
         "nice": 0,
-        "sys": 1277125,
-        "idle": 52594187,
-        "irq": 10359
+        "sys": 2556468,
+        "idle": 44460140,
+        "irq": 14890
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 2513750,
+        "user": 4294828,
         "nice": 0,
-        "sys": 2888812,
-        "idle": 50222968,
-        "irq": 16078
+        "sys": 2801328,
+        "idle": 45608562,
+        "irq": 28000
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 1466687,
+        "user": 2400984,
         "nice": 0,
-        "sys": 1587984,
-        "idle": 52570843,
-        "irq": 10218
+        "sys": 1846093,
+        "idle": 48457625,
+        "irq": 17078
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 2120500,
+        "user": 3491953,
         "nice": 0,
-        "sys": 2343203,
-        "idle": 51161812,
-        "irq": 15328
+        "sys": 2562593,
+        "idle": 46650156,
+        "irq": 28015
       },
       {
         "model": "AMD FX(tm)-8320 Eight-Core Processor           ",
         "speed": 3500,
-        "user": 1480781,
+        "user": 2571500,
         "nice": 0,
-        "sys": 1496406,
-        "idle": 52648312,
-        "irq": 10343
+        "sys": 2825468,
+        "idle": 47307718,
+        "irq": 19843
       }
     ],
     "networkInterfaces": [
@@ -167,79 +167,71 @@
   },
   "nativeStack": [
     {
-      "pc": "0x00007ff6e3c32449",
+      "pc": "0x00007ff6a7b12449",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+11577"
     },
     {
-      "pc": "0x00007ff6e3c369a9",
+      "pc": "0x00007ff6a7b169a9",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+29337"
     },
     {
-      "pc": "0x00007ff6e3c35828",
+      "pc": "0x00007ff6a7b15828",
       "symbol": "std::basic_ostream<char,std::char_traits<char> >::operator<<+24856"
     },
     {
-      "pc": "0x00007ff6e3d6d8c2",
+      "pc": "0x00007ff6a7c4d8c2",
       "symbol": "v8::base::CPU::has_sse+68658"
     },
     {
-      "pc": "0x00007ff6e4589bbe",
+      "pc": "0x00007ff6a8469bbe",
       "symbol": "v8::Isolate::ReportExternalAllocationLimitReached+94"
     },
     {
-      "pc": "0x00007ff6e4571c91",
+      "pc": "0x00007ff6a8451c91",
       "symbol": "v8::SharedArrayBuffer::Externalize+833"
     },
     {
-      "pc": "0x00007ff6e443e1ec",
+      "pc": "0x00007ff6a831e1ec",
       "symbol": "v8::internal::Heap::EphemeronKeyWriteBarrierFromCode+1436"
     },
     {
-      "pc": "0x00007ff6e4449420",
+      "pc": "0x00007ff6a8329420",
       "symbol": "v8::internal::Heap::ProtectUnprotectedMemoryChunks+1312"
     },
     {
-      "pc": "0x00007ff6e4445f44",
+      "pc": "0x00007ff6a8325f44",
       "symbol": "v8::internal::Heap::PageFlagsAreConsistent+3204"
     },
     {
-      "pc": "0x00007ff6e443b743",
+      "pc": "0x00007ff6a831b743",
       "symbol": "v8::internal::Heap::CollectGarbage+1283"
     },
     {
-      "pc": "0x00007ff6e4439db4",
+      "pc": "0x00007ff6a8319db4",
       "symbol": "v8::internal::Heap::AddRetainedMap+2452"
     },
     {
-      "pc": "0x00007ff6e445afbd",
+      "pc": "0x00007ff6a833afbd",
       "symbol": "v8::internal::Factory::NewFillerObject+61"
     },
     {
-      "pc": "0x00007ff6e41c1871",
+      "pc": "0x00007ff6a80a1871",
       "symbol": "v8::internal::interpreter::JumpTableTargetOffsets::iterator::operator=+1665"
     },
     {
-      "pc": "0x00007ff6e49d6c4d",
+      "pc": "0x00007ff6a88b6c4d",
       "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+546637"
     },
     {
-      "pc": "0x00007ff6e499a446",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+298822"
-    },
-    {
-      "pc": "0x00007ff6e495728a",
-      "symbol": "v8::internal::SetupIsolateDelegate::SetupHeap+23946"
-    },
-    {
-      "pc": "0x000002fdc81cee63",
+      "pc": "0x000003f7ebd0ec0b",
       "symbol": ""
     }
   ],
   "javascriptHeap": {
-    "totalMemory": 2151915520,
-    "totalCommittedMemory": 2151915520,
-    "usedMemory": 2142682080,
-    "availableMemory": 49280600,
+    "totalMemory": 2153218048,
+    "totalCommittedMemory": 2153218048,
+    "usedMemory": 2141525896,
+    "availableMemory": 46737784,
     "memoryLimit": 2197815296,
     "heapSpaces": {
       "read_only_space": {
@@ -253,35 +245,35 @@
         "memorySize": 2097152,
         "committedMemory": 2097152,
         "capacity": 1047456,
-        "used": 374360,
-        "available": 673096
+        "used": 912,
+        "available": 1046544
       },
       "old_space": {
-        "memorySize": 1885745152,
-        "committedMemory": 1885745152,
-        "capacity": 1882297776,
-        "used": 1880637504,
-        "available": 1660272
+        "memorySize": 1862152192,
+        "committedMemory": 1862152192,
+        "capacity": 1856711864,
+        "used": 1856665328,
+        "available": 46536
       },
       "code_space": {
-        "memorySize": 3575808,
-        "committedMemory": 3575808,
-        "capacity": 3137856,
-        "used": 3137856,
+        "memorySize": 3837952,
+        "committedMemory": 3837952,
+        "capacity": 3334048,
+        "used": 3334048,
         "available": 0
       },
       "map_space": {
-        "memorySize": 9703424,
-        "committedMemory": 9703424,
-        "capacity": 8754800,
-        "used": 8754800,
+        "memorySize": 11014144,
+        "committedMemory": 11014144,
+        "capacity": 8394800,
+        "used": 8394800,
         "available": 0
       },
       "large_object_space": {
-        "memorySize": 249622528,
-        "committedMemory": 249622528,
-        "capacity": 248929136,
-        "used": 248929136,
+        "memorySize": 272945152,
+        "committedMemory": 272945152,
+        "capacity": 272282384,
+        "used": 272282384,
         "available": 0
       },
       "code_large_object_space": {
@@ -301,17 +293,17 @@
     }
   },
   "resourceUsage": {
-    "userCpuSeconds": 309,
-    "kernelCpuSeconds": 17.343,
-    "cpuConsumptionPercent": 0.64671,
-    "maxRss": 2169462784,
+    "userCpuSeconds": 299.14,
+    "kernelCpuSeconds": 23.062,
+    "cpuConsumptionPercent": 6.79608,
+    "maxRss": 2188996608,
     "pageFaults": {
-      "IORequired": 1734478,
+      "IORequired": 1880583,
       "IONotRequired": 0
     },
     "fsActivity": {
-      "reads": 6412,
-      "writes": 97
+      "reads": 7564,
+      "writes": 401
     }
   },
   "libuv": [
@@ -330,8 +322,6 @@
     "ComSpec": "C:\\WINDOWS\\system32\\cmd.exe",
     "dp0": "F:\\laragon\\www\\django\\ICT-Resources\\ict_resources_frontend\\node_modules\\.bin\\",
     "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
-    "FPS_BROWSER_APP_PROFILE_STRING": "Internet Explorer",
-    "FPS_BROWSER_USER_PROFILE_STRING": "Default",
     "GIT_ASKPASS": "f:\\Program Files (x86)\\Microsoft VS Code\\resources\\app\\extensions\\git\\dist\\askpass.sh",
     "HOME": "C:\\Users\\TheProgrammer",
     "HOMEDRIVE": "C:",

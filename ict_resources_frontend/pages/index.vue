@@ -344,7 +344,6 @@ update_date_component
 
   mounted(){
 
-    console.log(this.$auth)
   }
 }
 </script>

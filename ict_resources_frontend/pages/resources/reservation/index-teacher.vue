@@ -52,13 +52,11 @@ export default {
     }, 
     computed: {
 
-        ...mapGetters('resources/reserver', [
-            'tab_reservation_valid','tab_reservation_failed', 'tab_classe', 'tab_equipment' , 'tab_user', 'tab_course'
-        ]),
+         ...mapGetters('resources/reserver', ['tab_reservation_valid','tab_reservation_failed' ]),
+         ...mapGetters('resources/classes', ['tab_classe', ]),
+        ...mapGetters('resources/equipment', [ 'tab_equipment']),
         
-        ...mapGetters('users/profil', [
-             'tab_user'
-        ]),
+        ...mapGetters('users/profil', ['tab_user']),
 
        
     },
@@ -66,14 +64,11 @@ export default {
     
 
     methods: {
-
-       ...mapActions('resources/reserver', [
-        'getAllReservationScheduleTeacher','getClasses','getEquipments','getAllCourse'
-    ]),
-    
-    ...mapActions('users/profil', [
-       'getAllUser'
-    ]),
+    ...mapActions('resources/reserver', ['getAllReservationSchedule',]),
+     ...mapActions('resources/classes', ['getClasses']),
+     ...mapActions('resources/equipment',['getEquipments']),
+     ...mapActions('resources/course',['getAllCourse']),
+    ...mapActions('users/profil', ['getAllUser']),
 
     
 
@@ -85,10 +80,7 @@ export default {
      
       this.getAllReservationScheduleTeacher(this.user.id)
 
-      this.getClasses()
-      this.getEquipments()
-      this.getAllUser()
-      this.getAllCourse()
+   
     }
   
 

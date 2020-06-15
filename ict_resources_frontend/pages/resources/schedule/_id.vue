@@ -137,6 +137,9 @@ import update_date_component from '~/components/resources/update_date_component.
       ...mapGetters('resources/reserver', [
    'dialogUpdate', 'events'
     ]),
+  ...mapGetters('resources/events', [
+  'events'
+    ]),
 
     selectedOpen: {
         get () {
@@ -187,12 +190,15 @@ import update_date_component from '~/components/resources/update_date_component.
    
     methods: {
 
-    ...mapActions('resources/reserver', [
-      
-      'setDialog' , 'getEvents','setDialogUpdate', 'getClasses', 'getEquipments' , 'getClasseCategoryId', 'getCourse'
 
+       ...mapActions('resources/reserver', ['getAllReservationSchedule','setDialog','setDialogUpdate']),
+     ...mapActions('resources/classes', ['getClasses','getClasseCategoryId']),
+     ...mapActions('resources/equipment',['getEquipments']),
+     ...mapActions('resources/course',['getAllCourse','getCourse']),
+     ...mapActions('resources/events', ['getEvents']),
+    ...mapActions('users/profil', ['getAllUser']),
+    
 
-    ]),
 
 
   
@@ -283,17 +289,7 @@ import update_date_component from '~/components/resources/update_date_component.
     mounted() {
 
     this.id_classe= this.$route.params.id
-
-     
-     
-    this.getEquipments()
-
-       this.getCourse()
-
-
-       this.getClasses()
-       console.log("id classe = ", this.id_classe)
-       this.getEvents(this.id_classe)
+    this.getEvents(this.id_classe)
 
     
 

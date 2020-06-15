@@ -1,0 +1,72 @@
+ def list(self, request, *args, **kwargs):
+
+        ## on veut recuperer le tableau des reservation valid et invalide
+        if self.pk is not None:
+            queryset_reservation_valid = ReservationSchedule.objects.all().filter(is_failed=True).filter(
+                id_teacher=self.pk)
+        else:
+            queryset_reservation_valid = ReservationSchedule.objects.all().filter(is_failed=True)
+        page_valid = self.paginate_queryset(queryset_reservation_valid)
+
+        if page_valid is not None:
+            serializer_valid_g = self.get_serializer(page_valid, many=True)
+            result_valid = self.get_paginated_response(serializer_valid_g.data)
+            serializer_valid = result_valid.data
+        else:
+            return Response({"data_valid": "none valid"})
+        tab_reservation_valid = []
+        for reservation_valid in serializer_valid['results']:
+            ##on recupere les emploie de temps
+            instance_schedule = Schedule.objects.filter(pk=reservation_valid["id_schedule"])
+
+            serializer_schedule = ScheduleSerializer(instance_schedule, many=True)
+            # pour avoir l'id de la reservation et non l'id  du schedule
+            serializer_schedule.data[0].update(id_reservation=reservation_valid["id"])
+            serializer_schedule.data[0].update(message=reservation_valid["message"])
+            serializer_schedule.data[0].update(links=serializer_valid["links"])
+            serializer_schedule.data[0].update(total=serializer_valid["total"])
+            serializer_schedule.data[0].update(page=serializer_valid["page"])
+            serializer_schedule.data[0].update(page_size=serializer_valid["page_size"])
+            serializer_schedule.data[0].update(page_size=serializer_valid["page_size"])
+
+            tab_reservation_valid.append(serializer_schedule.data[0])
+
+            if self.pk is not None:
+                queryset_reservation_failed = ReservationSchedule.objects.all().filter(is_failed=False).filter(
+                    id_teacher=self.pk)
+            else:
+                queryset_reservation_failed = ReservationSchedule.objects.all().filter(is_failed=False)
+            page_failed = self.paginate_queryset(queryset_reservation_failed)
+            if page_failed is not None:
+                serializer_failed_g = self.get_serializer(page_failed, many=True)
+                result_failed = self.get_paginated_response(serializer_failed_g.data)
+                serializer_failed = result_failed.data
+            else:
+                return Response({"data_valid": "none failed"})
+
+            tab_reservation_failed = []
+
+            # on recupere les classe pour les ajouter
+
+            for reservation_failed in serializer_failed['results']:
+                ##on recupere les emploie de temps
+                instance_schedule = Schedule.objects.filter(pk=reservation_failed["id_schedule"])
+
+                serializer_schedule = ScheduleSerializer(instance_schedule, many=True)
+                # pour avoir l'id de la reservation et non l'id  du schedule
+                serializer_schedule.data[0].update(id_reservation=reservation_failed["id"])
+                serializer_schedule.data[0].update(message=reservation_failed["message"])
+
+                serializer_schedule.data[0].update(links=serializer_failed["links"])
+                serializer_schedule.data[0].update(total=serializer_failed["total"])
+                serializer_schedule.data[0].update(page=serializer_failed["page"])
+                serializer_schedule.data[0].update(page_size=serializer_failed["page_size"])
+
+                # on recupere les classe pour les ajouter
+
+                tab_reservation_failed.append(serializer_schedule.data[0])
+            return Response({"data_failed": tab_reservation_failed, 'data_valid': tab_reservation_valid})
+
+        # les reservaiton qui ont échoué
+
+        # on recupere les classe pour les ajouter

@@ -94,16 +94,25 @@ export default {
 
     computed: {
 
-        ...mapGetters('resources/reserver', [
-            'tab_classe', 'tab_category','tab_course_category',
+        ...mapGetters('resources/classes', [
+            'tab_classe', 'tab_category',
+        ]),
+        
+        ...mapGetters('resources/course', [
+            'tab_course_category',
         ])
     },
 
     methods: {
 
-    ...mapActions('resources/reserver', [
-        'getClasses', 'getEvents' , 'getAllCategoryClasse','getClasseCategoryId','getCourse'
-    ]),
+    
+     ...mapActions('resources/classes', ['getClasses','getClasseCategoryId','getAllCategoryClasse']),
+     ...mapActions('resources/equipment',['getEquipments']),
+     ...mapActions('resources/course',['getAllCourse','getCourse']),
+     ...mapActions('resources/events',['getEvents']),
+ 
+ 
+
 
       reserve () {
         this.loading = true
@@ -132,9 +141,6 @@ export default {
     async mounted() {
 
 
-    this.getClasses()
-    this.getAllCategoryClasse()
-      
 
 
 

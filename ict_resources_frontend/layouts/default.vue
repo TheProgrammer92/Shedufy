@@ -118,6 +118,8 @@
 </template>
 
 <script>
+
+import {mapActions} from 'vuex'
 export default {
 
   auth: true,
@@ -166,8 +168,38 @@ export default {
     }
   },
 
-  methods: {
+   head () {
+    return {
+      title:"TheProgrammer Default page",
+      meta: [
+        // hid est utilisé comme identifiant unique. N'utilisez pas `vmid` car ça ne fonctionnera pas
+        { hid: 'description', name: 'description', content: 'Ma description personnalisée' }
+      ]
+    }
+  },
 
+  async fetch() {
+     this.getAllReservationSchedule()
+      this.getClasses()
+      this.getEquipments()
+      this.getAllUser()
+      this.getAllCourse()
+
+    this.getAllCategoryClasse()
+       this.getCourse()
+
+
+      
+  },
+  fetchOnServer: false,
+  methods: {
+    ...mapActions('resources/reserver', ['getAllReservationSchedule',]),
+     ...mapActions('resources/classes', ['getClasses','getAllCategoryClasse']),
+     ...mapActions('resources/equipment',['getEquipments']),
+     ...mapActions('resources/course',['getAllCourse','getCourse']),
+    ...mapActions('users/profil', ['getAllUser']),
+
+    
    async  logout() {
 
       let data_refresh = {

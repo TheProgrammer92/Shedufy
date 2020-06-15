@@ -60,12 +60,8 @@ export default {
     
   },
   methods: {
-    ...mapActions('resources/reserver', [
-      
-      'setDialogDate', 'addEvent','setDialog'
-
-
-    ]),
+    ...mapActions('resources/reserver', ['setDialogDate', 'setDialog']),
+  ...mapActions('resources/events', ['addEvent']),
 
     addNewEvent:function() {
 

@@ -165,8 +165,14 @@ export default {
 
   computed: {
 
-        ...mapGetters('resources/reserver', [
-            'tab_reservation_valid','tab_reservation_failed', 'tab_classe', 'tab_equipment' , 'tab_user', 'tab_course'
+        ...mapGetters('resources/reserver', ['tab_reservation_valid','tab_reservation_failed' ]),
+
+        ...mapGetters('resources/classes', ['tab_classe'
+        ]),
+
+        ...mapGetters('resources/equipment', ['tab_equipment' , 'tab_user', 'tab_course'
+        ]),
+         ...mapGetters('resources/course', ['tab_course'
         ]),
         
         ...mapGetters('users/profil', [

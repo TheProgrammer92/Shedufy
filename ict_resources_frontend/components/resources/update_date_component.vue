@@ -276,9 +276,12 @@
   
   
      computed: {
-      ...mapGetters('resources/reserver', [
-     'events','dialogUpdate','tab_classe', 'tab_equipment', 'tab_classe_category_selected','tab_course_category'
-    ]),
+      ...mapGetters('resources/reserver', ['dialogUpdate' ]),
+      ...mapGetters('resources/classes', ['tab_classe']),
+      ...mapGetters('resources/equipment', [ 'tab_equipment', ]),
+    
+    ...mapGetters('resources/course', ['tab_course_category']),
+    ...mapGetters('resources/events', ['events']),
     
     dialog: {
         get () {
@@ -293,10 +296,11 @@
 
     methods: {
 
-           ...mapActions('resources/reserver', [
-      
-                'setDialog' , 'getEvents','setDialogUpdate','addEvent','getClasses','getEquipments'
-                ]),
+           ...mapActions('resources/reserver', ['setDialog' ,'setDialogUpdate',]),
+
+           ...mapActions('resources/events', ['getEvents','addEvent']),
+           ...mapActions('resources/equipment', ['getEquipments']),
+           ...mapActions('resources/classes', ['getClasses']),
 
 
     getClasseById() {
