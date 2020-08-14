@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^api/', include('myresources.urls')),
     url(r'^api/', include('myresources_profil.urls')),
 
-
+    path('admin/doc/', include('django.contrib.admindocs.urls'))
 
 ]
 

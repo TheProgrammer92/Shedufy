@@ -13,25 +13,7 @@
 
             <b-form @submit.prevent="register"  autocomplete="off">
 
-                <b-form-group id="name"
-                              label-for="User name"
-                              :description="errors.username ? errors.username: ''">
-
-                         <!--   <span v-if="hasError  && hasErrorName ">  errors.name </span>-->
-
-
-                    <b-form-input id="name"
-                                  type="text"
-                                  v-model="data.username"
-                                  required
-                                  placeholder="enter name"
-
-                    >
-                    </b-form-input>
-                    <!--<span class="floating-label">enter email</span>-->
-
-                </b-form-group>
-
+           
                 <b-form-group id="email"
                               label-for="email"
                               :description="errors.email ? errors.email: ''">
@@ -117,7 +99,7 @@
 
                 data: {
 
-                  username: '',
+                 
                   password: '',
                   email: ''
                 }
@@ -132,7 +114,7 @@
               try {
 
                
-                let response = await this.$axios.$post('http://localhost:8000/api/users/', this.data)
+                let response = await this.$axios.$post('http://localhost:8000/api/profil/create/', this.data)
 
                 this.$router.push({name :'auth-login'})
               } catch (err) {

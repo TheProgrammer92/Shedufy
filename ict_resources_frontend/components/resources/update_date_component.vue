@@ -74,18 +74,36 @@
     v-model="valid"
     lazy-validation
   >
-   
+    
     <v-select
-        v-model="eventInput.id_course"
-        :items="tab_course_category"
+        v-model="eventInput.id_type"
+
+        :items="tab_type_events"
         filled
         chips
         color="blue-grey lighten-2"
-        label="Select"
+        label="Type Event"
+        item-text="type"
+        item-value="id"
+
+        
+      >
+    <!-- Template for render selected data -->
+   
+    <!-- Template for render data when the select is expanded -->
+ 
+  </v-select>
+
+
+    <v-select
+        v-model="eventInput.id_course"
+        :items="tab_course"
+        filled
+        chips
+        color="blue-grey lighten-2"
+        label="Cours"
         item-text="name"
         item-value="id"
-   
-
 
         
       >
@@ -128,7 +146,7 @@
      <v-select
            item-text="code_classe"
               item-value="id"
-              :items="getClasseById()"
+              :items="tab_classe"
               filled
               label="Classe"
               v-model="eventInput.id_classe"
@@ -138,17 +156,25 @@
          
 
     <v-select
-      item-text="equipment"
+      item-text="level_code"
               item-value="id"
-              :items="tab_equipment"
+              :items="tab_level"
               filled
-              label="Equipement"
-              v-model="eventInput.id_equipment"
+              label="Niveau"
+              v-model="eventInput.id_level"
              
             >
     </v-select>
          
-
+  <v-overflow-btn
+      class="my-2"
+      :items="tab_teacher"
+      label="Professeur"
+      editable
+      item-value="id"
+      item-text="email"
+      v-model="eventInput.id_teacher"
+    ></v-overflow-btn>
    
    
 
@@ -250,8 +276,9 @@
             color: "#1976D2",
             end: "",
             id_classe:1,
-            id_equipment:"",
-            id_teacher:""
+            id_teacher:"",
+            id_type:'',
+            id_level:''
         },
         
     
@@ -281,7 +308,8 @@
       ...mapGetters('resources/equipment', [ 'tab_equipment', ]),
     
     ...mapGetters('resources/course', ['tab_course_category']),
-    ...mapGetters('resources/events', ['events']),
+    ...mapGetters('resources/events', ['events','tab_type_events']),
+    ...mapGetters('resources/utils', ['events','tab_course', 'tab_level','tab_teacher']),
     
     dialog: {
         get () {
@@ -298,7 +326,7 @@
 
            ...mapActions('resources/reserver', ['setDialog' ,'setDialogUpdate',]),
 
-           ...mapActions('resources/events', ['getEvents','addEvent']),
+           ...mapActions('resources/events', ['getEvents']),
            ...mapActions('resources/equipment', ['getEquipments']),
            ...mapActions('resources/classes', ['getClasses']),
 
@@ -317,19 +345,18 @@
   async addEvent() {
 
         let eventInput = this.eventInput
-        eventInput.id_teacher = this.user.id
 
   
-        if ( eventInput.start && eventInput.end && eventInput.id_course && eventInput.id_classe) {
+        if ( eventInput.start && eventInput.end && eventInput.id_teacher && eventInput.id_classe && eventInput.id_course && eventInput.id_type) {
 
-          console.log(eventInput)
+              console.log("allez.. my event input ==" , eventInput)
             let data = (await this.$axios.post('api/resources/', eventInput)).data
 
             //   state.getEvents()
 
-             this.getEvents(this.id_classe)
+           //  this.getEvents(this.id_classe)
             
-            this.dialog_message_teacher =  !this.dialog_message_teacher
+             this.dialog_message_teacher =  !this.dialog_message_teacher
              this.setDialogUpdate()
 
 
@@ -341,7 +368,7 @@
      async deleteEvent () {
       
         let data = (await this.$axios.delete('api/resources/' + this.selectedEvent.id + '/')).data
-        this.getEvents(this.id_classe)
+        this.getEvents()
 
        this.setDialogUpdate()
     },
@@ -358,7 +385,7 @@
       let data = (await this.$axios.put('api/resources/' + this.selectedEvent.id + '/', 
         this.selectedEvent
     ))
-       this.getEvents(this.id_classe)
+       this.getEvents()
 
    
       this.setDialogUpdate()
@@ -374,6 +401,8 @@
     updated() {
 
        this.eventInput= this.selectedEvent
+
+       console.log("selected event = ", this.selectedEvent)
 
 
  

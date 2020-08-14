@@ -138,15 +138,7 @@ export default {
       }
     },
 
-    async mounted() {
-
-
-
-
-
-
-        
-    }
+    
     
 }
 </script>

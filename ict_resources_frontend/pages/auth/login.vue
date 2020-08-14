@@ -8,9 +8,7 @@
 
 
         <div class="body-form">
-            <h3 style="text-align: center;">Welcome to MyResource
-
-            </h3>
+            <h3 style="text-align: center;">  Welcome to MyResource </h3>
             <br>
 
             <p v-if="errors.detail">  {{errors.detail }} </p>
@@ -18,17 +16,17 @@
             <b-form @submit.prevent="login"  autocomplete="off">
 
                 <b-form-group
-                              label-for="User name"
-                              :description="errors.username ? errors.username: ''">
+                              label-for="User email"
+                              :description="errors.email ? errors.email: ''">
 
                          <!--   <span v-if="hasError  && hasErrorName ">  errors.name </span>-->
 
 
                     <b-form-input
-                                  type="text"
-                                  v-model="data.username"
+                                  type="email"
+                                  v-model="data.email"
                                   required
-                                  placeholder="enter name"
+                                  placeholder="enter email"
 
                     >
                     </b-form-input>
@@ -110,7 +108,7 @@
 
                 data: {
 
-                  username: '',
+                  email: '',
                   password: '',
 
                 }
@@ -133,7 +131,7 @@
 
                 let form =  {
 
-                username: app.data.username,
+                email: app.data.email,
                 password: app.data.password
 
               }
@@ -175,7 +173,11 @@
 
 
         },
+  mounted() {
+      
+     
 
+  }
 
 
 

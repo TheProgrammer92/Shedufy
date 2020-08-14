@@ -2,6 +2,7 @@ export const state = () => ({
 
 
     events: [],
+    tab_type_events: []
 
 
 
@@ -14,24 +15,48 @@ export const state = () => ({
 
 export const mutations = {
 
+    async GET_TYPE_EVENT(state) {
+
+        let data = (await this.$axios.get('api/TypeScheduleView')).data
+        state.tab_type_schedule = []
+
+        state.tab_type_events = data.data
 
 
-    async GET_EVENTS(state, id_classe) {
+
+    },
+    /**
+     * 
+     * @param {*} state 
+     * @param {*} params_load_event {by_type:"classe, level,salle,cours" , id_level, id_classe, cours}
+     */
+    async GET_EVENTS(state, params_load_event) {
 
 
-        let data = (await this.$axios.get('api/resources/' + id_classe + '/')).data
+
+        let data = (await this.$axios.$get('api/resources/', {
+            params: params_load_event
+        }))
+
+
+
         state.events = []
-        let dataEach = data.data
-
-        let tab_event = dataEach
-
-
-        let data_course = (await this.$axios.get('api/getCourse/')).data
 
 
 
-        let tab_course = data_course.data
+        let tab_event = data.data
 
+        //
+
+        let datas = (await this.$axios.get('api/getDepartmentFilierLevelId/' + params_load_event.id_department + '/?is_id_admin=guest')).data
+
+
+
+
+        let tab_department = datas.department
+        let tab_filiere = datas.filiere
+        let tab_level = datas.level
+        let tab_course = datas.course
 
 
 
@@ -42,18 +67,26 @@ export const mutations = {
 
 
             let e = tab_course.filter(course => course.id == event.id_course)
+            let e_level = tab_level.filter(level => level.id == event.id_level)
+            let e_type_event = state.tab_type_events.filter(type_event => type_event.id == event.id_type)
+
 
             // je fais ca pour enleve le premier id de category
             let newFormElement = event
-            newFormElement.id = e[0].id
+            newFormElement.id = event.id
             newFormElement.name = e[0].name
             newFormElement.code_course = e[0].code_course
-            newFormElement.code_course = e[0].code_course
+
+
+            newFormElement.level_code = e_level[0].level_code
+
+
+            newFormElement.color = e_type_event[0].color
+
+
             newFormElement.start = event.start
             newFormElement.end = event.end
-            newFormElement.color = event.color
             newFormElement.id_classe = event.id_classe
-            newFormElement.id_equipment = event.id_equipment
 
 
 
@@ -65,6 +98,8 @@ export const mutations = {
 
 
         })
+
+        console.log("tab_event final = ", state.events)
 
 
 
@@ -110,11 +145,16 @@ export const mutations = {
 
 export const actions = {
 
-    getEvents({ commit }, id_classe) {
-        commit('GET_EVENTS', id_classe)
+    async getEvents({ commit }, params_load_event) {
+        commit('GET_EVENTS', params_load_event)
     },
     addEvent({ commit }, eventInput) {
         commit('ADD_EVENT', eventInput)
+
+    },
+
+    getTypeEvent({ commit }) {
+        commit('GET_TYPE_EVENT', )
 
     },
 
@@ -131,6 +171,7 @@ export const getters = {
 
 
     events: state => state.events,
+    tab_type_events: state => state.tab_type_events,
 
 
 

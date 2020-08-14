@@ -10,13 +10,37 @@ User = get_user_model()
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['id_course', 'start', 'end', 'color', 'id', 'id_classe', 'id_equipment', 'id_teacher', 'is_valid']
+        fields = ['id_course', 'start', 'end',  'id_level', 'id_classe','id','id_teacher', 'is_valid', 'id_type']
+
+
+class TypeScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TypeSchedule
+        exclude = []
 
 
 class ReservationScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservationSchedule
         fields = ['id_schedule', 'id_teacher', 'id', 'message']
+
+
+class DepartmentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        exclude = []
+
+
+class FiliereSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Filiere
+        exclude = []
+
+
+class LevelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Level
+        exclude = []
 
 
 class CategoryClassSerializer(serializers.ModelSerializer):

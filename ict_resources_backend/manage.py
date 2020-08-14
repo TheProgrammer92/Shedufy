@@ -1,7 +1,15 @@
-
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from asgiref.sync import async_to_sync
+
+
+@async_to_sync
+async def sync_function():
+    print("bonjour ma func")
+
+
+sync = async_to_sync(sync_function)
 
 
 def main():

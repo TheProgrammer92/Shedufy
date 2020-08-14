@@ -1,8 +1,12 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from myresources.views.viewsets import *
-from myresources.views.views import *
+from myresources.views.CourseView import *
+from myresources.views.ClasseView import *
+from myresources.views.ScheduleView import *
+from myresources.views.ReservationScheduleView import *
+from myresources.views.EquipmentView import *
+from myresources.views.DepartmentView import *
 
 router = routers.DefaultRouter()
 
@@ -19,13 +23,15 @@ urlpatterns = [
     path('getCategoryClasse/', CategoryClassView.as_view()),
     path('getClasseCategoryId/<int:pk>/', CategoryClasseGetId.as_view()),
     path('getClasse/', ClasseView.as_view()),
+    path('getDepartmentFilierLevelId/<int:pk>/', getDepartmentFilierLevelId.as_view()),
+    path('getAllDepartment/', getAllDepartment.as_view()),
+    path('TypeScheduleView/', TypeScheduleView.as_view()),
 
-    #course
+    # course
 
     path('getCourse/', GetCourse.as_view()),
     path('getCategoryCourse/', GetCategoryCourse.as_view()),
 
     ##reservation
-
 
 ]

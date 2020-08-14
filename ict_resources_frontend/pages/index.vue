@@ -5,7 +5,7 @@
     align-center
   >
 
-  
+  {{user}}
       <section id="hero">
         <v-row no-gutters>
           <v-img
@@ -336,7 +336,16 @@ export default {
 
   middleware: 'isauth',
   layout: 'default'
-,
+, 
+
+data() {
+  return {
+
+    features:[],
+    articles:[],
+    stats:[]
+  }
+},
   components: {
 update_date_component
   },
