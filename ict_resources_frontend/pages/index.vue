@@ -5,7 +5,6 @@
     align-center
   >
 
-  {{user}}
       <section id="hero">
         <v-row no-gutters>
           <v-img
@@ -335,7 +334,7 @@ import update_date_component from '~/components/resources/update_date_component.
 export default {
 
   middleware: 'isauth',
-  layout: 'default'
+  layout: 'layout-home'
 , 
 
 data() {
