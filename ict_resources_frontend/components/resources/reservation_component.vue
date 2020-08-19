@@ -1,7 +1,7 @@
 <template>
     <v-expansion-panels popout>
-        <xmodal v-model="isModal" :params="options" />
 
+        <xmodal v-model="isModal" :params="options" />
         <v-expansion-panel
           v-for="(reservation, i) in tab_reservation"
           :key="i"
@@ -39,15 +39,15 @@
                 sm="5"
                 md="3"
               >
-                <strong> {{getTeacherById(reservation.id_teacher).username}}</strong>
+                <strong> {{getTeacherByIdName(reservation.id_teacher)}}</strong>
                
                 <span
                 
                   class="grey--text"
-                  v-if="getTeacherById(reservation.id_teacher).matricule !== null"
+            
                 >
                   &nbsp;
-                  {{getTeacherById(reservation.id_teacher).matricule}}
+                  {{getTeacherByIdMatricule(reservation.id_teacher)}}
                 </span>
               </v-col>
 
@@ -64,7 +64,7 @@
                   small
             
                 >
-                  {{getCodeclasse(reservation.id_classe)}}
+                  {{getCodeclasse(reservation.id_classe).code_classe}}
                 </v-chip>
                 <strong v-html="'Rien'"></strong>
               </v-col>
@@ -87,7 +87,6 @@
 
                <p>Début du cours : {{reservation.start}}</p>
                <p>Fin  du cours: {{reservation.end}}</p>
-               <p v-if="getEquipmentById(reservation.id_equipment).equipment !== undefined">Equipement  :{{getEquipmentById(reservation.id_equipment).equipment}}</p>
 
              <div v-if="is_admin">
               <v-btn v-if="!is_valid" @click.prevent="updateReservationSchedule(reservation.id_reservation)" 
@@ -121,6 +120,8 @@ export default {
         tab_reservation: Array,
         is_valid: Boolean // verifier si on va afficher le boutton valid ou refuser
     },
+
+    layout:'layout-home',
 
     data() {
 
@@ -199,45 +200,84 @@ export default {
 
      getClasseById:function(id) {
 
-            let classe = this.tab_classe.filter(classe => classe.id == id)[0]
-            return classe == undefined ? "" : classe
+            try {
+
+              let classe = this.tab_classe.find(classe => classe.id == id)
+            return classe
+            } catch (error) {
+              return undefined
+            }
 
         },
     getCodeclasse:function(id) {
 
 
-           if (this.tab_classe !== []) {
-               let classe = this.tab_classe.filter(classe => classe.id == id)[0]
-                    return classe == undefined ? "" : classe.code_classe
+          try {
+              if (this.tab_classe !== []) {
+               let classe = this.tab_classe.find(classe => classe.id == id)
+                return  classe
            }
-           return ""
-
-        },
-
-    getEquipmentById:function(id) {
-          if(this.tab_equipment !== []) {
-            let equipment = this.tab_equipment.filter(equipment => equipment.id == id)[0]
-            return equipment == undefined ? "":equipment 
+          } catch (error) {
+            return undefined
           }
-          return {}
-        },
-        
-    getTeacherById:function(id) {
 
-          return this.tab_user.filter(user => user.id == id)[0]
+        },
+
+   
+     getTeacherByIdName:function(id) {
+
+
+          try {
+
+            let teacher =  this.tab_user.find(user => user.id == id)
+         
+
+             return teacher.username
+
+          }
+
+         
+          catch (error) {
+
+            return undefined
+            
+          }
+           
+        },
+
+    getTeacherByIdMatricule:function(id) {
+         try {
+
+            let teacher =  this.tab_user.find(user => user.id == id)
+         
+
+               return teacher.matricule
+           
+           
+         } catch (error) {
+            return undefined 
+         }
         },
 
 
      getCourseCodeCourse:function(id) {
 
-        if(id) {
 
              if(this.tab_course !== []) {
 
-              return this.tab_course.filter(course => course.id == id)[0].code_course
-            }
+               try {
 
-            return {}
+                 
+                    let course = this.tab_course.find(course => course.id == id)
+                          
+
+                       return course.code_course
+               } catch (error) {
+                 return undefined
+               }
+     
+
+        
         }
 
 
@@ -247,13 +287,18 @@ export default {
 
         getCourseName:function(id) {
 
+          try {
+
             if(this.tab_course !== []) {
-            
-                let name = this.tab_course.filter(course => course.id == id)[0]
-               return name.name == undefined ? "" :name.name
+                let name = this.tab_course.find(course => course.id == id)
+               return name.name
             }
 
-            return {}
+            
+            
+          } catch (error) {
+              return undefined
+          }
         },
 
 
@@ -262,7 +307,6 @@ export default {
      
        
              this.options.props.id_reservation = id
-              console.log("avant id reservation = "  ,this.options.props)
 
              this.isModal= !this.isModal
 

@@ -9,6 +9,11 @@ const Validation = {
     install(Vue, options) {
 
         Vue.mixin({
+            data() {
+                return {
+
+                }
+            },
             computed: {
 
                 ...mapGetters({
@@ -16,9 +21,18 @@ const Validation = {
                     user: 'user',
                     is_teacher: 'is_teacher',
                     authenticated: "authenticated",
-                    is_admin: "is_admin"
+                    is_admin: "is_admin",
 
-                })
+                }),
+
+                RESERVATION() {
+
+                    return 6
+                },
+                ETAT_ATTENTE() {
+
+                    return 3
+                }
             }
         })
     }

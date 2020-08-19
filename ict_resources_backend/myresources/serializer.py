@@ -10,7 +10,8 @@ User = get_user_model()
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['id_course', 'start', 'end',  'id_level', 'id_classe','id','id_teacher', 'is_valid', 'id_type']
+        fields = ['id_course', 'start', 'end', 'id_level', 'id_classe', 'id', 'id_teacher', 'type_reservation',
+                  'id_type', 'id_etat' , 'id_user']
 
 
 class TypeScheduleSerializer(serializers.ModelSerializer):

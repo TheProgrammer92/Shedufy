@@ -10,25 +10,30 @@ export const state = () => ({
 
 
     tab_reservation_valid: [],
-    tab_reservation_failed: []
+    tab_reservation_refus: [],
+    tab_reservation_attente: [],
+    tab_reservation_annulle: [],
 })
 
 
 export const mutations = {
     async GET_ALL_RESERVATION_SCHEDULE(state) {
 
-        let data = (await this.$axios.get('api/reservationSchedule/')).data
+        let data = (await this.$axios.get('api/reservationschedule/')).data
+
+
         state.tab_reservation_valid = []
-        state.tab_reservation_failed = []
+        state.tab_reservation_refus = []
+        state.tab_reservation_attente = []
+        state.tab_reservation_annulle = []
 
 
 
-
-        state.tab_reservation_valid = data.data_valid
-
-
-
-        state.tab_reservation_failed = data.data_failed
+        //on recupere les type de reservation
+        state.tab_reservation_valid = data.reservation_valid
+        state.tab_reservation_refus = data.reservation_refus
+        state.tab_reservation_attente = data.reservation_attente
+        state.tab_reservation_annulle = data.reservation_annulle
 
 
 
@@ -36,18 +41,23 @@ export const mutations = {
     async GET_ALL_RESERVATION_SCHEDULE_TEACHER(state, id_teacher) {
 
 
-        let data = (await this.$axios.get('api/reservationSchedule/' + id_teacher + '/')).data
+
+
+        let data = (await this.$axios.get('api/reservationschedule/' + id_teacher + '/')).data
         state.tab_reservation_valid = []
-        state.tab_reservation_failed = []
+        state.tab_reservation_refus = []
+        state.tab_reservation_attente = []
+        state.tab_reservation_annulle = []
 
 
 
-        state.tab_reservation_valid = data.data_valid
+        //on recupere les type de reservation
+        state.tab_reservation_valid = data.reservation_valid
+        state.tab_reservation_refus = data.reservation_refus
+        state.tab_reservation_attente = data.reservation_attente
+        state.tab_reservation_annulle = data.reservation_annulle
 
-
-
-        state.tab_reservation_failed = data.data_failed
-
+        console.log('tab_reservation_refus', state.reservation_refus)
 
 
     },
@@ -129,7 +139,9 @@ export const getters = {
     dialogUpdate: state => state.dialogUpdate,
     dialogDate: state => state.dialogDate,
     tab_reservation_valid: state => state.tab_reservation_valid,
-    tab_reservation_failed: state => state.tab_reservation_failed,
+    tab_reservation_refus: state => state.tab_reservation_refus,
+    tab_reservation_attente: state => state.tab_reservation_attente,
+    tab_reservation_annulle: state => state.tab_reservation_annulle,
 
 
 

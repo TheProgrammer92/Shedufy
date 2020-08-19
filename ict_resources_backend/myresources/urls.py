@@ -4,16 +4,17 @@ from rest_framework import routers
 from myresources.views.CourseView import *
 from myresources.views.ClasseView import *
 from myresources.views.ScheduleView import *
-from myresources.views.ReservationScheduleView import *
+# from myresources.views.ReservationScheduleView import *
 from myresources.views.EquipmentView import *
 from myresources.views.DepartmentView import *
+from myresources.views.ReservationView import *
 
 router = routers.DefaultRouter()
 
 router.register(r'resources', ScheduleViewset)
 
 router.register(r'equipment', EquipmentViewset)
-router.register(r'reservationSchedule', ReservationScheduleViewset)
+router.register(r'reservationschedule', ReservationViewset)
 
 urlpatterns = [
 

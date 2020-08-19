@@ -12,6 +12,7 @@ import PrettyCheckbox from 'pretty-checkbox-vue';
 Vue.use(PrettyCheckbox);
 Vue.use(xmodal);
 
+// (Optional) import 'vuetify-datetime-picker/src/stylus/main.styl'
 
 
 Vue.use(Datetime)

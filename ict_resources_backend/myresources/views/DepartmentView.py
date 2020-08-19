@@ -1,3 +1,6 @@
+import logging
+
+from rest_framework import status
 from rest_framework.generics import *
 
 from rest_framework.response import Response
@@ -28,19 +31,24 @@ class getDepartmentFilierLevelId(RetrieveAPIView):
     serializer_class = DepartmentListSerializer
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        user = User.objects.get(pk=pk)
-        profiles = user.profile.all().values()
+
         queryset_depart = None
 
         is_id_admin = self.request.GET.get('is_id_admin')
 
         queryset_depart = None
-
         if is_id_admin == "admin":
+
+            user = User.objects.get(pk=pk)
+            profiles = user.profile.all().values()
             for profile in profiles:
-                queryset_depart = Department.objects.filter(pk=1)
+                queryset_depart = Department.objects.filter(pk=profile['department_id'])
         if is_id_admin == "guest":
-            queryset_depart = Department.objects.filter(pk=1)
+            queryset_depart = Department.objects.filter(pk=pk)
+            if not queryset_depart.exists():
+                return Response({"Error": "departement n'existe pas "}, status.HTTP_404_NOT_FOUND)
+
+            # pk = id du departement einn
         # recherchons les departement
 
         depart_serializer = DepartmentListSerializer(queryset_depart, many=True)
@@ -49,28 +57,43 @@ class getDepartmentFilierLevelId(RetrieveAPIView):
 
         queryset_filiere = []
         tab_filiere = []
-        for department in depart_serializer.data:
-            queryset_filiere = Filiere.objects.filter(pk=department['id'])
-            serializer_filiere = FiliereSerializer(queryset_filiere, many=True)
-            tab_filiere.append(serializer_filiere.data[0])
+
+        try:
+
+            for department in depart_serializer.data:
+                queryset_filiere = Filiere.objects.filter(pk=department['id'])
+                serializer_filiere = FiliereSerializer(queryset_filiere, many=True)
+                tab_filiere.append(serializer_filiere.data[0])
+
+        except IndexError:
+            pass
 
         # recherchons les niveau en liée aux filiere
         tab_level = []
-        for filiere in tab_filiere:
-            for level in filiere['id_level']:
-                queryset_level = Level.objects.filter(pk=level)
-                serializer_level = LevelSerializer(queryset_level, many=True)
-                tab_level.append(serializer_level.data[0])
+
+        try:
+            for filiere in tab_filiere:
+                for level in filiere['id_level']:
+                    queryset_level = Level.objects.filter(pk=level)
+                    serializer_level = LevelSerializer(queryset_level, many=True)
+                    tab_level.append(serializer_level.data[0])
+        except IndexError:
+            pass
 
         # Recherchons les cours liée au niveau
         tab_course = []
-        for level in tab_level:
+        try:
 
-            for course in level['course']:
-                queryset_course = Course.objects.filter(pk=course)
-                serializer_course = CourseSerializer(queryset_course, many=True)
-                tab_course.append(serializer_course.data[0])
+            for level in tab_level:
 
+                for course in level['course']:
+                    queryset_course = Course.objects.filter(pk=course)
+                    serializer_course = CourseSerializer(queryset_course, many=True)
+                    tab_course.append(serializer_course.data[0])
+
+
+        except IndexError:
+            pass
         # les type d'evenement pour avoir les couleur
 
         # chargement des professeur

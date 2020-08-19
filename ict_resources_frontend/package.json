@@ -29,6 +29,7 @@
         "vue-snotify": "^3.2.1",
         "vue-template-compiler": "^2.6.10",
         "vue-textarea-autosize": "^1.1.1",
+        "vuetify-datetime-picker": "^2.1.1",
         "weekstart": "^1.0.1",
         "xmodal-vue": "^0.2.0"
     },

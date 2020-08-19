@@ -2,7 +2,7 @@ export const state = () => ({
 
 
     events: [],
-    tab_type_events: []
+    tab_type_events: [],
 
 
 
@@ -17,10 +17,12 @@ export const mutations = {
 
     async GET_TYPE_EVENT(state) {
 
-        let data = (await this.$axios.get('api/TypeScheduleView')).data
-        state.tab_type_schedule = []
+        let datas = (await this.$axios.$get('api/TypeScheduleView')).data
+        state.tab_type_events = []
 
-        state.tab_type_events = data.data
+
+        console.log("regade type event in events ==", datas)
+        state.tab_type_events = datas
 
 
 
@@ -33,6 +35,8 @@ export const mutations = {
     async GET_EVENTS(state, params_load_event) {
 
 
+
+        console.log("params for get event s= ", params_load_event)
 
         let data = (await this.$axios.$get('api/resources/', {
             params: params_load_event
@@ -68,8 +72,23 @@ export const mutations = {
 
             let e = tab_course.filter(course => course.id == event.id_course)
             let e_level = tab_level.filter(level => level.id == event.id_level)
-            let e_type_event = state.tab_type_events.filter(type_event => type_event.id == event.id_type)
 
+            // pour modifier la couleur verifions si c'est une reservation, si c'est une reservation on mettra une meme couleur
+
+
+
+            let type_reservation = state.tab_type_events.filter(type_event => type_event.type == 6)[0] //6 = reservation
+
+            let e_type_event = undefined
+            if (type_reservation.type == params_load_event.id_type) {
+
+                e_type_event = state.tab_type_events.filter(type_event => type_event.type == event.type_reservation)
+
+
+            } else {
+                e_type_event = state.tab_type_events.filter(type_event => type_event.type == event.id_type)
+
+            }
 
             // je fais ca pour enleve le premier id de category
             let newFormElement = event
@@ -100,7 +119,6 @@ export const mutations = {
         })
 
         console.log("tab_event final = ", state.events)
-
 
 
 

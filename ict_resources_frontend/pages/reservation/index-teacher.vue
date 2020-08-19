@@ -9,12 +9,12 @@
   <v-subheader>Reservation valid</v-subheader>
          <reservation-component v-if="!(tab_reservation_valid == [])" 
           :tab_reservation="tab_reservation_valid" :is_valid="true" ></reservation-component>
- <br><br>
+   <br><br>
 
       <v-subheader  >Rerservation échoué</v-subheader>
 
-       <reservation-component v-if="!(tab_reservation_failed == [])"
-        :tab_reservation="tab_reservation_failed" :is_valid="false" ></reservation-component>
+       <reservation-component v-if="!(tab_reservation_refus == [])"
+        :tab_reservation="tab_reservation_refus" :is_valid="false" ></reservation-component>
 
     
         
@@ -35,7 +35,9 @@ import reservationComponent from "~/components/resources/reservation_component"
 import  {mapActions, mapGetters} from "vuex"
 
 export default {
-    middleware: 'teacher',
+
+
+layout:"layout-home",
 
   data() {
 
@@ -52,7 +54,10 @@ export default {
     }, 
     computed: {
 
-         ...mapGetters('resources/reserver', ['tab_reservation_valid','tab_reservation_failed' ]),
+         ...mapGetters('resources/reserver', ['tab_reservation_valid',
+            'tab_reservation_refus','tab_reservation_attente' ,
+            'tab_reservation_annulle' ]),
+
          ...mapGetters('resources/classes', ['tab_classe', ]),
         ...mapGetters('resources/equipment', [ 'tab_equipment']),
         
@@ -64,7 +69,7 @@ export default {
     
 
     methods: {
-    ...mapActions('resources/reserver', ['getAllReservationSchedule',]),
+    ...mapActions('resources/reserver', ['getAllReservationSchedule','getAllReservationScheduleTeacher']),
      ...mapActions('resources/classes', ['getClasses']),
      ...mapActions('resources/equipment',['getEquipments']),
      ...mapActions('resources/course',['getAllCourse']),
@@ -78,8 +83,9 @@ export default {
     
 
      
-      this.getAllReservationScheduleTeacher(this.user.id)
 
+                this.getAllReservationScheduleTeacher(this.user.id)
+        
    
     }
   

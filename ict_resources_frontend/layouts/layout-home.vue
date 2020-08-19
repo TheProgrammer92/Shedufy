@@ -55,6 +55,8 @@
       </v-list>
 
 
+
+
       <template v-slot:append>
         <div class="pa-2" @click.prevent="logout">
           <v-btn block>Se Deconnecter</v-btn>
@@ -71,7 +73,7 @@
     >
       <v-spacer></v-spacer>
 
-      <v-toolbar-title color="black">MyResource4D </v-toolbar-title>
+      <v-toolbar-title color="black">IXcvxcvoxcvxc</v-toolbar-title>
 
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
@@ -93,6 +95,8 @@
 </template>
 
 <script>
+import {mapActions,mapGetters} from 'vuex'
+
   export default {
     name: 'LayoutsDemosBaselineFlipped',
     props: {
@@ -126,12 +130,72 @@
         {
           icon: 'mdi-chart-bubble',
           title: 'Reservation',
-          to: '/resources/classe'
+          to: '/reservation/index-teacher'
+        } ,
+        
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Reservation',
+          to: '/reservation/'
         }
       ],
     }),
 
+      async fetch() {
+
+    
+
+    //verification s'il est admin pour le selectionner
+
+    let params ={}
+    if(this.user.is_admin) {
+       params.what_action ="admin"
+       params.id_user=this.user.id
+       this.getDepartmentFilierLevelId(params)
+
+
+    }
+    else {
+      
+          this.getAllDepartment()
+
+    }
+
+
+
+       this.getClasses()
+      this.getAllUser()
+       this.getAllCourse()
+
+     this.getAllCategoryClasse()
+       this.getCourse()
+
+      this.getTypeEvent()
+
+    
+
+      
+  },
+  fetchOnServer: false,
+
+  computed: {
+
+       ...mapGetters('resources/events', ['tab_type_events']),
+  ...mapGetters('resources/utils', ['tab_filiere' ,'tab_department' ,
+   'tab_level', 'tab_course','cours_selected','level_selected', 
+   'salle_selected','filiere_selected', 'type_schedule_selected','department_selected']),
+  }
+,
     methods: {
+ ...mapActions('resources/reserver', ['getAllReservationSchedule',]),
+     ...mapActions('resources/classes', ['getClasses','getAllCategoryClasse']),
+     ...mapActions('resources/equipment',['getEquipments']),
+     ...mapActions('resources/course',['getAllCourse','getCourse']),
+    ...mapActions('users/profil', ['getAllUser']),
+    ...mapActions('resources/events', ['getTypeEvent','getEvents']),
+     ...mapActions('resources/utils', ['getDepartmentFilierLevelId','getAllDepartment',
+     'set_salle','set_filiere','set_type_schedule',
+     'set_level','set_cours']),
 
       async  logout() {
 
@@ -147,7 +211,9 @@
 
 
 
-        }
+        },
   },
+
+ 
   }
 </script>

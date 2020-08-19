@@ -120,7 +120,7 @@
         {
           icon: 'mdi-chart-bubble',
           title: 'Reservation',
-          to: '/resources/classe'
+          to: '/reservation/index-teacher'
         }
       ],
     }),

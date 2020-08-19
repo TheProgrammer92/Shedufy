@@ -14,6 +14,8 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
+from myresources_profil.constants import *
+
 User = get_user_model()
 
 
@@ -90,19 +92,36 @@ class Equipment(models.Model):
 
 
 class TypeSchedule(models.Model):
-    class TypeSchedule(models.TextChoices):
-        CC = 'CC', _('CC')
-        SN = 'SN', _('Session Normale')
-        COURS = 'COURS', _('COURS')
-        RATTRAPPAGE = 'RATTRAPPAGE', _('RATTRAPPAGE')
-        TD = 'TD', _('TD')
-        TP = 'TP', _('TP')
+    ROLE_CHOICES = (
+        (COURS, 'cours'),
+        (CC, 'cc'),
+        (RATTRAPAGE, 'rattrapage'),
+        (TD, 'TD'),
+        (SN, 'sn'),
+        (RESERVATION, 'reservation'),
+    )
 
-    type = models.CharField(max_length=20, choices=TypeSchedule.choices, default=TypeSchedule.COURS, unique=True)
-    color = models.CharField(max_length=255, default="1976d2")
+    type = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=COURS, unique=True)
+    color = models.CharField(max_length=255, default="blue")
+    value = models.CharField(max_length=55 , unique=True)
 
     def __str__(self):
-        return self.type
+        return str(self.type) + " " + self.value
+
+
+# les differents état d'un schedule pour la reservation
+class Etat(models.Model):
+    ROLE_CHOICES = (
+        (ETAT_VALIDE, 'validé'),
+        (ETAT_ANNULLE, 'annulté'),
+        (ETAT_REFUS, 'refusé'),
+        (ETAT_ATTENTE, 'en attente'),
+    )
+
+    etat = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True, default=ETAT_VALIDE)
+
+    def __str__(self):
+        return str(self.pk) + " " + self.get_etat_display()
 
 
 class Schedule(models.Model):
@@ -113,7 +132,12 @@ class Schedule(models.Model):
     id_course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False, null=True)
     id_teacher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
     id_level = models.ForeignKey(Level, on_delete=models.CASCADE, blank=False, null=True)
-    id_type = models.ForeignKey(TypeSchedule, on_delete=models.CASCADE, blank=False, null=True)
+    id_type = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, blank=False, null=True)
+    id_etat = models.ForeignKey(Etat, on_delete=models.CASCADE, default=ETAT_VALIDE)
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+                                related_name="id_user_schedule")
+    type_reservation = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, blank=True, null=True,
+                                         related_name="type_reservation")  # pour identifier le type de reservation pour le prof
 
     def __str__(self):
         return self.start + " " + self.end

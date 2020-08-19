@@ -4,12 +4,10 @@
   <div>
 
     <dialog-message :dialog_message_teacher="dialog_message_teacher"></dialog-message>
-
     <v-row
       justify="center"
     >
       
-
 
       <v-dialog
         v-model="dialog"
@@ -75,7 +73,7 @@
     lazy-validation
   >
     
-    <v-select
+    <v-select v-if="user.is_admin"
         v-model="eventInput.id_type"
 
         :items="tab_type_events"
@@ -83,10 +81,38 @@
         chips
         color="blue-grey lighten-2"
         label="Type Event"
-        item-text="type"
-        item-value="id"
+        item-text="value"
+        item-value="type"   
 
-        
+      
+      
+      >
+        </v-select>
+
+      <v-select v-if="user.is_teacher"
+        v-model="eventInput.id_type"
+
+        :items="get_type_for_teacher"
+        filled
+        chips
+        color="blue-grey lighten-2"
+        label="Type d'evenement"
+        item-text="value"
+        item-value="type"   
+      > 
+        </v-select> 
+
+      <v-select 
+      v-if="user.is_teacher"
+        v-model="eventInput.type_reservation"
+
+        :items="tab_type_events"
+        filled
+        chips
+        color="blue-grey lighten-2"
+        label="Type reservation"
+        item-text="value"
+        item-value="type"   
       >
     <!-- Template for render selected data -->
    
@@ -114,10 +140,6 @@
   </v-select>
 
 
-
-    
-   
-
    <v-text-field
       v-model="eventInput.start"
    
@@ -135,13 +157,6 @@
     ></v-text-field>
 
 
-  <v-text-field
-      v-model="eventInput.color"
-   
-      label="Color"
-      required
-      type="color"
-    ></v-text-field>
 
      <v-select
            item-text="code_classe"
@@ -167,6 +182,7 @@
     </v-select>
          
   <v-overflow-btn
+  v-if="user.is_admin"
       class="my-2"
       :items="tab_teacher"
       label="Professeur"
@@ -175,10 +191,40 @@
       item-text="email"
       v-model="eventInput.id_teacher"
     ></v-overflow-btn>
+
+
+   <div v-if="verify_if_reservation(eventInput.type_reservation)">
    
-   
+     <v-btn
+      color="primary"
+      class="mr-4"
+     @click.prevent="addEvent"
+    >
+      Valider
+    </v-btn> 
+    
+    <v-btn
+      color="error"
+      class="mr-4"
+     @click.prevent="deleteEvent"
+    >
+      Faire attendre
+    </v-btn>
 
     <v-btn
+      color="warning"
+    
+  @click.prevent="updateEvent"
+    >
+
+     Annuler
+    </v-btn>
+   </div>
+
+
+  <div  v-if="(user.is_admin || user.is_teacher)  && !(verify_if_reservation(eventInput.type_reservation))">
+   
+     <v-btn
       color="primary"
       class="mr-4"
      @click.prevent="addEvent"
@@ -190,8 +236,7 @@
       color="error"
       class="mr-4"
      @click.prevent="deleteEvent"
-    >
-      Delete
+    >Supprimer
     </v-btn>
 
     <v-btn
@@ -202,6 +247,8 @@
 
      Update
     </v-btn>
+   </div> 
+  
   </v-form>
            
          
@@ -278,7 +325,10 @@
             id_classe:1,
             id_teacher:"",
             id_type:'',
-            id_level:''
+            id_level:'',
+            id_etat:1,
+            id_user:'',
+            type_reservation:''
         },
         
     
@@ -310,6 +360,15 @@
     ...mapGetters('resources/course', ['tab_course_category']),
     ...mapGetters('resources/events', ['events','tab_type_events']),
     ...mapGetters('resources/utils', ['events','tab_course', 'tab_level','tab_teacher']),
+
+    get_type_for_teacher() {
+
+        let f = this.tab_type_events.find(type_event => type_event.type === this.RESERVATION)
+        return f
+    },
+
+
+
     
     dialog: {
         get () {
@@ -341,22 +400,63 @@
         
     },
 
+    //verifions si l'emploie qu'il a cliqué est une reservation
+    verify_if_reservation(id_reservation){
+    
+  
+       
+
+        if (id_reservation == this.RESERVATION) {
+console.log("éééé true = ")
+
+            return true
+        }
+        else {
+console.log("éééé false = ")
+
+          return false
+        }
+
+
+
+   
+
+
+
+    },
 
   async addEvent() {
 
         let eventInput = this.eventInput
+        eventInput.id_user = this.user.id
 
-  
-        if ( eventInput.start && eventInput.end && eventInput.id_teacher && eventInput.id_classe && eventInput.id_course && eventInput.id_type) {
 
-              console.log("allez.. my event input ==" , eventInput)
+        console.log(eventInput)
+    
+
+        if (true) {
+
+            
+
+        //verifions si c'est un prof ou un admin, pour voir si c'est une reservation ou pas et change  l'etat
+
+            if(this.user.is_admin) {
+
+
+                eventInput.id_etat = 1 //etat valide
+            }
+            else if(this.user.is_teacher) {
+                eventInput.id_teacher = this.user.id
+                eventInput.id_etat =  this.ETAT_ATTENTE //etat en atttente de validation par secretaire
+
+            }
+
             let data = (await this.$axios.post('api/resources/', eventInput)).data
 
             //   state.getEvents()
 
            //  this.getEvents(this.id_classe)
             
-             this.dialog_message_teacher =  !this.dialog_message_teacher
              this.setDialogUpdate()
 
 

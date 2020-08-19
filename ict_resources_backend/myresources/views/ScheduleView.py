@@ -3,6 +3,7 @@ from rest_framework.generics import ListAPIView
 
 from rest_framework.response import Response
 
+from myresources.functions import search_schedule_for_teacher_admin_guest
 from myresources.serializer import *
 from myresources.models import Schedule
 
@@ -28,6 +29,7 @@ class ScheduleViewset(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
 
     # on va afficher en  fonction de la salle,niveau, cours
+    # on va seulement recuperer ceux dont les réservation ont été validé
     def list(self, request, *args, **kwargs):
 
         id_level = self.request.GET.get('id_level')
@@ -35,17 +37,38 @@ class ScheduleViewset(viewsets.ModelViewSet):
         id_user = self.request.GET.get('id_user')
         id_type = self.request.GET.get('id_type')
         id_classe = self.request.GET.get('id_classe')
-        if by_type == "level":
-            queryset = self.filter_queryset(
-                Schedule.objects.all().filter(id_level=id_level, id_type=id_type))
-            serializer = ScheduleSerializer(queryset, many=True)
-            return Response({"data": serializer.data})
 
-        if by_type == "salle":
-            queryset = self.filter_queryset(
-                Schedule.objects.all().filter(id_classe=id_classe, id_type=id_type))
-            serializer = ScheduleSerializer(queryset, many=True)
-            return Response({"data": serializer.data})
+        # verifions si id_type est une reservation , pour   changer le type de requete
+        try:
+            type_schedule = TypeSchedule.objects.get(type=id_type)
+            user = User.objects.get(pk=id_user)
+
+            if type_schedule.type == RESERVATION:
+
+                # seul les prof ou admin peuvent avoir les reservation
+
+                if user.is_teacher or user.is_admin:
+                    is_reservation = True
+                    data_return = search_schedule_for_teacher_admin_guest(self, is_reservation=is_reservation,
+                                                                          by_type=by_type,
+                                                                          id_level=id_level, id_classe=id_classe
+                                                                          , id_type=id_type, etat=ETAT_ATTENTE)
+                else:
+                    return Response({"errors": "Vous n'avez pas le droit de voir les reservation"},
+                                    status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            else:
+                is_reservation = False
+                data_return = search_schedule_for_teacher_admin_guest(self, is_reservation=is_reservation,
+                                                                      by_type=by_type,
+                                                                      id_level=id_level, id_classe=id_classe
+                                                                      , id_type=id_type, etat=ETAT_VALIDE)
+
+            return Response({"data": data_return.data})
+
+        except User.DoesNotExist:
+            return Response({'data': 'utilisateur non trouvé '}, status=status.HTTP_404_NOT_FOUND)
+        except TypeSchedule.DoesNotExist:
+            return Response({'data': "reservation n'existe pas "}, status=status.HTTP_404_NOT_FOUND)
 
     def create(self, request, *args, **kwargs):
 

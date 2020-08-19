@@ -12,7 +12,9 @@
       app
       
     >
-   
+   {{user.is_admin ? 'admin': "no-admin"}}
+   <br/>
+   {{user.is_teacher ? 'teacher': "no-teacher"}}
  
   <br>
 <div class="ml-5">
@@ -37,25 +39,43 @@
       <h5>{{getLevelById}}</h5>
   
   </div>
- <div class="ml-5">
+  <!-- si c'est pas un prof, nou admin, on affche pas la ""RESERVATION3""" -->
+ <div class="ml-5" v-if="!(user.is_teacher || user.is_admin)">
  
   <h6>Trie</h6>
 
 
-    <div v-for="type in tab_type_events"   :key="type.id">
+    <div  v-for="type in tab_type_events"   :key="type.id" >
+
+
+      <template v-if="type.value !== 'RESERVATION'">
+        <p-radio  
+            @change="load_by_type_schedule" :value="type.type" 
+              class="p-default p-curve" name="color" color="primary-o">{{type.value}} </p-radio> 
+
+      <br>
+      </template>
+    </div>
+  
+</div>
+
+ <div class="ml-5" v-if="user.is_teacher || user.is_admin">
+ 
+  <h6>Trie</h6>
+
+    <div   v-for="type in tab_type_events"   :key="type.id">
      <p-radio  
-     @change="load_by_type_schedule" :value="type.id" 
-      class="p-default p-curve" name="color" color="primary-o">{{type.type}} </p-radio> 
+     @change="load_by_type_schedule" :value="type.type" 
+      class="p-default p-curve" name="color" color="primary-o">{{type.value}} </p-radio> 
 
       <br>
     </div>
   
-    </div>
+</div>
 
 <br>
 
 <div class="ml-5">
- 
   <h6>Trie par</h6>
 
 
@@ -92,26 +112,29 @@
           :to="item.to"
           router
           exact
-          v-if="get_bool_is_show(item.type_is_show)"
+    
           @click.prevent="item.isLogout ? logout: null"
        
         >
          
+              
+            <template  v-if="get_bool_is_show(item.type_is_show)">
             
-     
-          <v-list-item-action >
-            <v-icon >{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content v-if="item.isLogout">
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
+                <v-list-item-action >
+                  <v-icon >{{ item.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content v-if="item.isLogout">
+                  <v-list-item-title v-text="item.title" />
+                </v-list-item-content>
 
-          <v-list-item-content v-if="!item.isLogout">
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
- 
+                <v-list-item-content v-if="!item.isLogout">
+                  <v-list-item-title v-text="item.title" />
+                </v-list-item-content>
+  
 
-        </v-list-item>
+
+            </template>
+                  </v-list-item>
 
       </v-list>
 
@@ -211,6 +234,7 @@
 import {mapActions,mapGetters} from 'vuex'
 export default {
 
+
   auth: true,
   data () {
     return {
@@ -261,7 +285,7 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'Reservation',
-          to: '/resources/reservation',
+          to: '/resources/reservation/index-teacher',
           type_is_show:"guest"
           
         } ,{
@@ -300,6 +324,8 @@ export default {
     if(this.user.is_admin) {
        params.what_action ="admin"
        params.id_user=this.user.id
+
+       
        this.getDepartmentFilierLevelId(params)
 
 
@@ -312,17 +338,16 @@ export default {
 
 
 
-    //  this.getAllReservationSchedule()
        this.getClasses()
-    //   this.getEquipments()
-    //   this.getAllUser()
-    //   this.getAllCourse()
+      this.getAllUser()
+       this.getAllCourse()
 
-    // this.getAllCategoryClasse()
-    //    this.getCourse()
+     this.getAllCategoryClasse()
+       this.getCourse()
 
       this.getTypeEvent()
 
+    
 
       
   },
@@ -339,7 +364,7 @@ export default {
   getDepartmentByID(value) {
 
 
-      let department =  this.tab_department.find(department => department.id ==this.department_selected)
+      let department =  this.tab_department.find(department => department.id == this.department_selected)
 
       if(department !==undefined) {
 
@@ -355,7 +380,7 @@ export default {
 
 
 
-      let level = this.tab_level.find(lev => lev.id ==this.level_selected)
+      let level = this.tab_level.find(lev => lev.id == this.level_selected)
 
     if(level == undefined) {
         return "Aucun niveau"
@@ -367,7 +392,7 @@ export default {
   },
 
   getFiliereById(value) {
-      let filiere =  this.tab_filiere.find(filiere => filiere.id ==this.filiere_selected)
+      let filiere =  this.tab_filiere.find(filiere => filiere.id == this.filiere_selected)
 
 
     
@@ -414,6 +439,7 @@ export default {
      
   }
     ,
+    
 
  load_by_level_or_salle(value) {
    
@@ -438,17 +464,15 @@ export default {
      /**verifions si les  level, departement, filiere, sont sélectionné*/
       verify_not_empty_data() {
 
-        console.log("regarde le level id_level",this.level_selected, this.filiere_selected,this.department_selected)
 
         
-        if (this.level_selected !==undefined && this.filiere_selected !==undefined  && this.department_selected!==undefined
-         && this.type_schedule_selected !==undefined){
+        if (this.level_selected !== undefined && this.filiere_selected !== undefined  && this.department_selected!== undefined
+         && this.type_schedule_selected !== undefined){
           return true
         }
 
         else {
 
-                  alert('veuillez selectionner le niveau, filiere departement')
 
           return false
         }

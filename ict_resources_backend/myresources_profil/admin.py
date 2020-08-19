@@ -17,7 +17,6 @@ class CustomUserAdmin(admin.ModelAdmin):
 
         # make changes to model instance
         profile = list(obj.profile.all().values_list())
-        print(profile)
 
         begin_url = CODE_STUDENT
 
@@ -47,7 +46,11 @@ class CustomUserAdmin(admin.ModelAdmin):
             obj.save()
 
         if STUDENT == id_profile:
-            pass
+            begin_url = CODE_STUDENT
+            to_add = Group.objects.get(name="STUDENT")  # get_or_create is a better option
+            obj.groups.add(to_add)
+            obj.is_staff = False
+            obj.save()
 
         url = generate_url(obj.email, begin_url)
         send_activate_account_mail(obj.email, url)

@@ -296,7 +296,6 @@ import update_date_component from '~/components/resources/update_date_component.
 
         else {
 
-          alert('veuillez selectionner le niveau, filiere departement')
 
           return false
         }
@@ -331,7 +330,6 @@ import update_date_component from '~/components/resources/update_date_component.
 
         else {
 
-          alert("Veuillez completer le departemnt, filiere , niveau")
         }
 
       

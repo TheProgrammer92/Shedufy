@@ -8,6 +8,7 @@ export const state = () => ({
     tab_level: [],
     tab_course: [],
     tab_teacher: [],
+    tab_type_reservation_prof: [],
 
 
     //les variable séléctionné pour la recherche
@@ -16,7 +17,8 @@ export const state = () => ({
     level_selected: undefined,
     salle_selected: undefined,
     type_schedule_selected: undefined, //on selectionne les cours par defaut
-    department_selected: undefined
+    department_selected: undefined,
+    tab_type_reservation_prof: []
 
 })
 
@@ -29,12 +31,17 @@ export const mutations = {
 
     async GET_ALL_DEPARTMENT(state) {
 
+        //on charge les departement pour tous le sprofesseur, 
+        //quand il vont selectionner un departement on actuelise juste les data
+
         let datas = (await this.$axios.get('api/getAllDepartment/')).data
         state.tab_department = datas.data
 
 
 
     },
+
+
 
     async GET_DEPARTMENT_FILIERE_LEVEL_ID(state, params) {
         let data;
@@ -91,7 +98,6 @@ export const mutations = {
         state.level_selected = value
     },
     SET_TYPE_SCHEDULE(state, value) {
-        console.log("changement du type schedule", value)
         state.type_schedule_selected = value
     },
 
