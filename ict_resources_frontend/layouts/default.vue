@@ -161,57 +161,7 @@
 
     </v-navigation-drawer>
 
-
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app 
-      
-    >
-     <v-btn
-        icon
-        @click.stop="drawer_left = !drawer_left"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-
-
-
-    <nuxt-link :to="'/resources/schedule/params'">
-      <v-btn icon > <v-icon>settings</v-icon> </v-btn>     
-    </nuxt-link>
-        <v-btn
-        icon
-        @click.stop="drawer = !drawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-
-
-
-    </v-app-bar>
+    <header-global></header-global>
 
     <!-- main -->
     <v-main>
@@ -232,11 +182,16 @@
 <script>
 
 import {mapActions,mapGetters} from 'vuex'
+
+import headerGlobal from '~/components/global/header-global'
 export default {
 
 
   auth: true,
+
+  components: {headerGlobal},
   data () {
+    
     return {
       clipped: true,
       drawer: false,
@@ -359,7 +314,8 @@ export default {
     ...mapGetters('resources/events', ['tab_type_events']),
   ...mapGetters('resources/utils', ['tab_filiere' ,'tab_department' ,
    'tab_level', 'tab_course','cours_selected','level_selected', 
-   'salle_selected','filiere_selected', 'type_schedule_selected','department_selected']),
+   'salle_selected','filiere_selected',
+    'type_schedule_selected','department_selected' , 'by_type_selected' , ]),
 
   getDepartmentByID(value) {
 
@@ -416,7 +372,7 @@ export default {
     ...mapActions('resources/events', ['getTypeEvent','getEvents']),
      ...mapActions('resources/utils', ['getDepartmentFilierLevelId','getAllDepartment',
      'set_salle','set_filiere','set_type_schedule',
-     'set_level','set_cours']),
+     'set_level','set_cours' , 'set_by_type']),
 
 
   load_by_type_schedule(value){
@@ -427,9 +383,9 @@ export default {
          let params_load_event = {
             id_type: this.type_schedule_selected,
             id_level: this.level_selected,
-            by_type: "level",
+            by_type: this.by_type_selected,
             id_user: this.user.id,
-            id_classe:this.classe_selected,
+            id_classe:this.salle_selected,
             id_department:this.department_selected
 
         }
@@ -442,16 +398,22 @@ export default {
     
 
  load_by_level_or_salle(value) {
-   
+
+
+
+      this.set_by_type(value)
+
+      console.log("type is set", this.by_type_selected)
+      console.log("classe is set",this.classe_selected,)
 
       if(this.verify_not_empty_data) {
 
          let params_load_event = {
             id_type: this.type_schedule_selected,
             id_level: this.level_selected,
-            by_type: value,
+            by_type: this.by_type_selected,
             id_user: this.user.id,
-            id_classe:this.classe_selected,
+            id_classe:this.salle_selected,
             id_department:this.department_selected
 
         }

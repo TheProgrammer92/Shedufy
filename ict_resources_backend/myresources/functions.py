@@ -13,9 +13,14 @@ def load_schedule_for_teacher_admin(by_type, is_reservation, id_level, id_type, 
 
     elif by_type == "salle":
         if is_reservation:
+
+            print ("salle reservation")
             return Schedule.objects.all().filter(id_classe=id_classe, type_reservation=id_type)
         if not is_reservation:
-            return Schedule.objects.all().filter(id_classe=id_classe, type_reservation=id_type, id_etat=etat)
+            print ("not salle reservation")
+            print (id_classe)
+
+            return Schedule.objects.all().filter(id_classe=id_classe, id_type=id_type, id_etat=etat)
 
 
 def search_schedule_for_teacher_admin_guest(self, is_reservation, by_type, id_level, id_classe, id_type, etat):

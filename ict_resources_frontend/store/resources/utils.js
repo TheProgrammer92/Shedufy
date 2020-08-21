@@ -18,7 +18,8 @@ export const state = () => ({
     salle_selected: undefined,
     type_schedule_selected: undefined, //on selectionne les cours par defaut
     department_selected: undefined,
-    tab_type_reservation_prof: []
+    tab_type_reservation_prof: [],
+    by_type_selected: 'level'
 
 })
 
@@ -90,6 +91,7 @@ export const mutations = {
         state.cours_selected = value
     },
     SET_SALLE(state, value) {
+
         state.salle_selected = value
     },
 
@@ -104,7 +106,13 @@ export const mutations = {
     SET_DEPARTMENT(state, value) {
 
         state.department_selected = value
-    }
+    },
+
+
+    SET_BY_TYPE(state, value) {
+
+        state.by_type_selected = value
+    },
 
 
 
@@ -147,6 +155,10 @@ export const actions = {
 
         commit("SET_TYPE_SCHEDULE", type)
     },
+    set_by_type({ commit }, value) {
+
+        commit("SET_BY_TYPE", value)
+    },
 
     set_department({ commit }, type) {
 
@@ -181,5 +193,6 @@ export const getters = {
     salle_selected: state => state.salle_selected,
     type_schedule_selected: state => state.type_schedule_selected,
     department_selected: state => state.department_selected,
+    by_type_selected: state => state.by_type_selected,
 
 }

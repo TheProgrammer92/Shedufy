@@ -92,7 +92,7 @@
             <v-col class="d-flex" cols="12" sm="6">
              
 
-                  <v-select
+              <v-select
                   item-text="code_classe"
               item-value="id"
               :items="tab_classe"
