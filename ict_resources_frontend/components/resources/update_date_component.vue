@@ -328,7 +328,8 @@
             id_level:'',
             id_etat:1,
             id_user:'',
-            type_reservation:''
+            type_reservation:'',
+            id_department:''
         },
         
     
@@ -359,7 +360,7 @@
     
     ...mapGetters('resources/course', ['tab_course_category']),
     ...mapGetters('resources/events', ['events','tab_type_events']),
-    ...mapGetters('resources/utils', ['events','tab_course', 'tab_level','tab_teacher']),
+    ...mapGetters('resources/utils', ['events','tab_course', 'tab_level','tab_teacher', 'department_selected']),
 
     get_type_for_teacher() {
 
@@ -429,6 +430,7 @@ console.log("éééé false = ")
 
         let eventInput = this.eventInput
         eventInput.id_user = this.user.id
+        eventInput.id_department = this.department_selected
 
 
         console.log(eventInput)

@@ -9,11 +9,14 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
-
+import locale
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from datetime import timedelta
+
+# change local to fr
+locale.setlocale(locale.LC_TIME, "fr")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -58,8 +61,6 @@ THIRTY_PACKAGE = [
 
     'anymail',
     'social_django'
-
-
 
 ]
 
@@ -340,8 +341,6 @@ AUTHENTICATION_BACKENDS = (
 
     'django.contrib.auth.backends.ModelBackend',
 )
-
-
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '368801957685-h0ggllnbfolth40gr4ui1v9vm2da500j.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'p3ghowV9oZpLMSpk3aHKQMeo'

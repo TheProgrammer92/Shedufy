@@ -57,7 +57,6 @@ export const mutations = {
         state.tab_reservation_attente = data.reservation_attente
         state.tab_reservation_annulle = data.reservation_annulle
 
-        console.log('tab_reservation_refus', state.reservation_refus)
 
 
     },

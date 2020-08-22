@@ -8,6 +8,7 @@ from myresources.views.ScheduleView import *
 from myresources.views.EquipmentView import *
 from myresources.views.DepartmentView import *
 from myresources.views.ReservationView import *
+from myresources.views.NotificationsView import *
 
 router = routers.DefaultRouter()
 
@@ -15,6 +16,7 @@ router.register(r'resources', ScheduleViewset)
 
 router.register(r'equipment', EquipmentViewset)
 router.register(r'reservationschedule', ReservationViewset)
+router.register(r'notifications', NotificationsViewset)
 
 urlpatterns = [
 
@@ -27,6 +29,7 @@ urlpatterns = [
     path('getDepartmentFilierLevelId/<int:pk>/', getDepartmentFilierLevelId.as_view()),
     path('getAllDepartment/', getAllDepartment.as_view()),
     path('TypeScheduleView/', TypeScheduleView.as_view()),
+    path('getCategorieNotification/', CategorieNotificationView.as_view()),
 
     # course
 

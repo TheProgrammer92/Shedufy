@@ -10,8 +10,20 @@ User = get_user_model()
 class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = ['id_course', 'start', 'end', 'id_level', 'id_classe', 'id', 'id_teacher', 'type_reservation',
-                  'id_type', 'id_etat' , 'id_user']
+        fields = ['id_course', 'start', 'end', 'id_level', 'id_classe', 'pk', 'id_teacher', 'type_reservation',
+                  'id_type', 'id_etat', 'id_user']
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notifications
+        exclude = []
+
+
+class CategorieNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CategorieNotifications
+        exclude = []
 
 
 class TypeScheduleSerializer(serializers.ModelSerializer):

@@ -2,7 +2,7 @@
     <div class="container-notification">
   <div class="notification">
     <transition name="fadeStart" v-cloak>
-      <div v-if="is_show_notification" class="tooltip">
+      <div v-if="is_show_notification" class="tooltips">
         <div id="heading">
           <div class="heading-left">
             <h6 class="heading-title">Notifications</h6>
@@ -12,13 +12,13 @@
           </div>
         </div>
         <ul class="notification-list">
-          <li class="notification-item" v-for="(user,keys)
-          of users" :key="keys">
+          <li class="notification-item" v-for="(notify,keys)
+          of tab_notification" :key="keys">
             <div class="img-left">
-              <img class="user-photo" alt="User Photo" v-bind:src="user.picture.thumbnail" />
+              <img class="user-photo" alt="User Photo" src="https://img.favpng.com/25/7/23/computer-icons-user-profile-avatar-image-png-favpng-LFqDyLRhe3PBXM0sx2LufsGFU.jpg" />
             </div>
             <div class="user-content">
-              <p class="user-info"><span class="name">{{user.name.first | capitalize}} {{user.name.last | capitalize}}</span> left a comment.</p>
+              <p class="user-info"><span class="name">{{notify.message}}</span> cliquer ici.</p>
               <p class="time">1 hour ago</p>
             </div>
           </li>
@@ -43,33 +43,31 @@ export default {
     computed: {
 
         ...mapGetters('resources/notifications', [
-            'is_show_notification'
+            'is_show_notification','tab_notification'
         ])
 
     },
+
+    async fetch() {
+
+
+        setInterval(this.getAllNotification, 3000);
+
+      
+    },
+
+    fetchOnServer:false,
   mounted () {
-    this.getUsers()
   },
 
   methods: {
-      ...mapActions('resources/notifications',['set_show_notification']),
+      ...mapActions('resources/notifications',['set_show_notification','get_notification_user_id']),
 
-    getUsers:function(){
-      this.$axios.get('https://randomuser.me/api/?results=3')
-        .then(response => {
-          this.users = response.data.results
-        })
-        .catch(e => {
-          this.error.push(e)
-        })
-    }
+  getAllNotification() {this.get_notification_user_id(this.user.id)
+   }
+   
   },
 
-  updated() {
-
-      console.log("update notif f" , this.is_show_notification)
-  }
-,
   filters: {
     capitalize: function (value) {
       if (!value) return ''
@@ -80,7 +78,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500');
@@ -94,15 +92,19 @@ export default {
   }
 }
 
+.notification{
+    position:relative
+}
+
 
 .container-notification {
   width: 20rem;
-  height: 20rem;
   grid-area: main;
   -ms-flex-item-align: center;
   align-self: center;
   justify-self: center;
-  position: absolute;;
+  position: absolute;
+  right:0
 }
 
 h2 {
@@ -150,7 +152,7 @@ a {
   color: #a5a6a8;
 }
 
-.tooltip {
+.tooltips {
   &::before {
     content: '';
     position: absolute;
@@ -161,10 +163,12 @@ a {
     border-bottom: 1.5rem solid #fff;
   }
   position: absolute;
-  top: 2.5rem;
+  top: 2.2rem;
   line-height: 1.5;
   color: #27303d;
   width: 20rem;
+  max-height: 700px;
+  overflow-y: auto;
   background: #fff;
   border-radius: 5px;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
@@ -287,9 +291,9 @@ span.name {
   animation: fadeEnd .2s both ease-in-out;
 }
 
-//[v-cloak] > * {
- // display: none;}
-//
+[v-cloak] > * {
+  display: none;}
+
 
 @-webkit-keyframes fadeStart {
   0% {

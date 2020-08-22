@@ -21,7 +21,6 @@ export const mutations = {
         state.tab_type_events = []
 
 
-        console.log("regade type event in events ==", datas)
         state.tab_type_events = datas
 
 
@@ -36,7 +35,6 @@ export const mutations = {
 
 
 
-        console.log("params for get event s= ", params_load_event)
 
         let data = (await this.$axios.$get('api/resources/', {
             params: params_load_event

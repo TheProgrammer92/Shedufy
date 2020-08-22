@@ -99,11 +99,12 @@ class TypeSchedule(models.Model):
         (TD, 'TD'),
         (SN, 'sn'),
         (RESERVATION, 'reservation'),
+        (TEACHER, 'teacher'),
     )
 
     type = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=COURS, unique=True)
     color = models.CharField(max_length=255, default="blue")
-    value = models.CharField(max_length=55 , unique=True)
+    value = models.CharField(max_length=55, unique=True)
 
     def __str__(self):
         return str(self.type) + " " + self.value
@@ -127,20 +128,52 @@ class Etat(models.Model):
 class Schedule(models.Model):
     start = models.CharField(blank=False, null=False, max_length=255)
     end = models.CharField(blank=False, null=False, max_length=55)
-    is_valid = models.BooleanField(default=False, blank=False)
-    id_classe = models.ForeignKey(Classe, on_delete=models.CASCADE, blank=False, null=True)
-    id_course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False, null=True)
+    id_classe = models.ForeignKey(Classe, on_delete=models.CASCADE, blank=False, null=False)
+    id_course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=False, null=False)
     id_teacher = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=True)
-    id_level = models.ForeignKey(Level, on_delete=models.CASCADE, blank=False, null=True)
-    id_type = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, blank=False, null=True)
+    id_level = models.ForeignKey(Level, on_delete=models.CASCADE, blank=False, null=False)
+    id_type = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, blank=False, null=False)
     id_etat = models.ForeignKey(Etat, on_delete=models.CASCADE, default=ETAT_VALIDE)
-    id_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,
+    id_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False,
                                 related_name="id_user_schedule")
     type_reservation = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, blank=True, null=True,
                                          related_name="type_reservation")  # pour identifier le type de reservation pour le prof
 
     def __str__(self):
         return self.start + " " + self.end
+
+
+# - envoyer les messages par mail, et aux professeur(q
+# uand un nouveau cours lui est attribué et quand on valide la réservation)
+# - notifier un admin quand un prof a demandé une réservation, .
+
+class CategorieNotifications(models.Model):
+    ROLE_CHOICES = (
+        (COURS, 'cours'),
+        (CC, 'cc'),
+        (RATTRAPAGE, 'rattrapage'),
+        (TD, 'TD'),
+        (SN, 'sn'),
+        (RESERVATION, 'reservation'),
+    )
+
+    type = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=COURS, unique=True)
+    value = models.CharField(max_length=255, default="cours")
+
+    def __str__(self):
+        return self.get_type_display()
+
+
+class Notifications(models.Model):
+    id_event = models.ForeignKey(Schedule, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
+    message = models.CharField(max_length=200)
+    id_cat = models.ForeignKey(CategorieNotifications, on_delete=models.CASCADE, to_field="type" )
+    id_emetter = models.ForeignKey(User, on_delete=models.CASCADE)
+    id_receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="receiver_notification")
+
+    def __str__(self):
+        return str(self.pk) + " " + self.message
 
 
 class ReservationSchedule(models.Model):

@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
 
-from functions.functions import generate_url, send_activate_account_mail
 
 User = settings.AUTH_USER_MODEL
 

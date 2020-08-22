@@ -1,14 +1,18 @@
 from rest_framework import status, viewsets
 from rest_framework.generics import ListAPIView
+from rest_framework.renderers import JSONRenderer
 
 from rest_framework.response import Response
 
+from functions.functions import verify_for_notification
 from myresources.functions import search_schedule_for_teacher_admin_guest
 from myresources.serializer import *
 from myresources.models import Schedule
 
 from django.contrib.auth import get_user_model
 from myresources.utils import *
+import io
+from rest_framework.parsers import JSONParser
 
 User = get_user_model()
 
@@ -56,6 +60,7 @@ class ScheduleViewset(viewsets.ModelViewSet):
                 else:
                     return Response({"errors": "Vous n'avez pas le droit de voir les reservation"},
                                     status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            # si c'est un cours, cc, td, sauf reservation
             else:
                 is_reservation = False
                 data_return = search_schedule_for_teacher_admin_guest(self, is_reservation=is_reservation,
@@ -82,9 +87,15 @@ class ScheduleViewset(viewsets.ModelViewSet):
 
             serializer.save()
 
-            # on recupere le type d'evenement et on ajoute a manytomany
+            # ~gestion des notifications
 
-            return Response({'status': status.HTTP_200_OK})
+            json = JSONRenderer().render(serializer.data)
+            stream = io.BytesIO(json)
+            data = JSONParser().parse(stream)
+
+            verify_for_notification(data)
+
+            return Response({'data': serializer.data, 'status': status.HTTP_200_OK})
         # else:
         #     return Response({'status': "Erreur de données", 'errors': serializer.errors})
 
