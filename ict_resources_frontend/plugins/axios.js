@@ -1,6 +1,6 @@
 export default function({ $axios, store, redirect }) {
     $axios.onRequest(config => {
-        // console.log('petit je fais une request' + config.url)
+        console.log('petit je fais une request' + config.url)
 
         store.dispatch('validation/clearErrors');
     })

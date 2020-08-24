@@ -32,6 +32,9 @@ const Validation = {
                 ETAT_ATTENTE() {
 
                     return 3
+                },
+                TYPE_TEACHER() {
+                    return 7
                 }
             }
         })

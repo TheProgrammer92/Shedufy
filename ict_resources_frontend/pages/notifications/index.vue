@@ -28,8 +28,7 @@ import  {mapActions, mapGetters} from "vuex"
 
 export default {
 
-    middleware: 'admin',
-    layout: 'default',
+    layout: 'layout-no-sidebar',
 
   data() {
 
@@ -46,7 +45,8 @@ export default {
 
         ...mapGetters('resources/notifications', [
             'is_show_notification','tab_notification'
-        ])
+        ]),
+       
 
     },
 
@@ -54,8 +54,8 @@ export default {
 
  methods: {
       ...mapActions('resources/notifications',['set_show_notification','get_notification_user_id']),
-
-  getAllNotification() {this.get_notification_user_id(this.user.id)
+  getAllNotification() {
+    this.get_notification_user_id(this.user.id)
    }
    
   },

@@ -99,7 +99,7 @@ class TypeSchedule(models.Model):
         (TD, 'TD'),
         (SN, 'sn'),
         (RESERVATION, 'reservation'),
-        (TEACHER, 'teacher'),
+        (TEACHER_TYPE, 'teacher'),
     )
 
     type = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=COURS, unique=True)
@@ -136,7 +136,8 @@ class Schedule(models.Model):
     id_etat = models.ForeignKey(Etat, on_delete=models.CASCADE, default=ETAT_VALIDE)
     id_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False,
                                 related_name="id_user_schedule")
-    type_reservation = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, blank=True, null=True,
+    id_department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    type_reservation = models.ForeignKey(TypeSchedule, to_field="type", on_delete=models.CASCADE, default=COURS, blank=False, null=False,
                                          related_name="type_reservation")  # pour identifier le type de reservation pour le prof
 
     def __str__(self):
@@ -168,7 +169,7 @@ class Notifications(models.Model):
     id_event = models.ForeignKey(Schedule, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     message = models.CharField(max_length=200)
-    id_cat = models.ForeignKey(CategorieNotifications, on_delete=models.CASCADE, to_field="type" )
+    id_cat = models.ForeignKey(CategorieNotifications, on_delete=models.CASCADE, to_field="type")
     id_emetter = models.ForeignKey(User, on_delete=models.CASCADE)
     id_receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="receiver_notification")
 

@@ -39,15 +39,18 @@ class ScheduleViewset(viewsets.ModelViewSet):
         id_level = self.request.GET.get('id_level')
         by_type = self.request.GET.get('by_type')
         id_user = self.request.GET.get('id_user')
-        id_type = self.request.GET.get('id_type')
+        id_type = int(self.request.GET.get('id_type'))
         id_classe = self.request.GET.get('id_classe')
+        id_department = self.request.GET.get('id_department')
 
-        # verifions si id_type est une reservation , pour   changer le type de requete
+        data_return = None
+        # verifions si id_type est une reservation , pour   changer le type de requete ou l'emploie du prof perso
         try:
-            type_schedule = TypeSchedule.objects.get(type=id_type)
             user = User.objects.get(pk=id_user)
 
-            if type_schedule.type == RESERVATION:
+            if id_type == RESERVATION:
+
+                print("reservation")
 
                 # seul les prof ou admin peuvent avoir les reservation
 
@@ -60,8 +63,17 @@ class ScheduleViewset(viewsets.ModelViewSet):
                 else:
                     return Response({"errors": "Vous n'avez pas le droit de voir les reservation"},
                                     status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+            # verifions si le prof veut son emploie de temps perso
+
+            elif id_type == TEACHER_TYPE:
+
+                if user.is_teacher:
+                    data_return = search_schedule_for_teacher_admin_guest(self, id_teacher=user.pk,
+                                                                          id_type=TEACHER_TYPE)
             # si c'est un cours, cc, td, sauf reservation
             else:
+
+                print("fals reser")
                 is_reservation = False
                 data_return = search_schedule_for_teacher_admin_guest(self, is_reservation=is_reservation,
                                                                       by_type=by_type,
@@ -123,6 +135,8 @@ class ScheduleViewset(viewsets.ModelViewSet):
             return Response({'status': status.HTTP_404_NOT_FOUND})
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        queryset = self.filter_queryset(Schedule.objects.filter(id_classe=pk).filter(is_valid=True))
+
+        print("attd..")
+        queryset = self.filter_queryset(Schedule.objects.filter(pk=pk))
         serializer = ScheduleSerializer(queryset, many=True)
         return Response({"data": serializer.data})

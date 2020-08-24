@@ -7,13 +7,19 @@
           <div class="heading-left">
             <h6 class="heading-title">Notifications</h6>
           </div>
-          <div class="heading-right">
-            <a class="notification-link" href="#">See all</a>
-          </div>
+            <div class="heading-right">
+
+              <nuxt-link to="/notifications" class="notification-link">
+               See all          
+               </nuxt-link>
+
+            </div>
+
         </div>
         <ul class="notification-list">
-          <li class="notification-item" v-for="(notify,keys)
-          of tab_notification" :key="keys">
+          <li class="notification-item " style="cursor:pointer" v-for="(notify,keys)
+          of tab_notification" :key="keys" @click.prevent="goToNotify(notify)">
+          <template >
             <div class="img-left">
               <img class="user-photo" alt="User Photo" src="https://img.favpng.com/25/7/23/computer-icons-user-profile-avatar-image-png-favpng-LFqDyLRhe3PBXM0sx2LufsGFU.jpg" />
             </div>
@@ -21,6 +27,8 @@
               <p class="user-info"><span class="name">{{notify.message}}</span> cliquer ici.</p>
               <p class="time">1 hour ago</p>
             </div>
+          </template>
+            
           </li>
         </ul>
       </div>
@@ -42,8 +50,9 @@ export default {
   }),
     computed: {
 
-        ...mapGetters('resources/notifications', [
-            'is_show_notification','tab_notification'
+        ...mapGetters(
+          'resources/notifications', [
+            'is_show_notification','tab_notification' ,'notification_selected'
         ])
 
     },
@@ -51,7 +60,7 @@ export default {
     async fetch() {
 
 
-        setInterval(this.getAllNotification, 3000);
+         setInterval(this.getAllNotification, 3000);
 
       
     },
@@ -61,9 +70,22 @@ export default {
   },
 
   methods: {
-      ...mapActions('resources/notifications',['set_show_notification','get_notification_user_id']),
+      ...mapActions('resources/notifications',['set_show_notification','get_notification_user_id','set_notification_selected']),
+      ...mapActions('resources/events',['getEventId']),
 
   getAllNotification() {this.get_notification_user_id(this.user.id)
+   },
+
+   goToNotify(notify) {
+
+
+     this.set_notification_selected(notify)
+
+       
+
+  
+     this.$router.push({ path: `/notifications/${notify.id}` }) // -> /user/123
+
    }
    
   },

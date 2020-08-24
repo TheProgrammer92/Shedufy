@@ -72,6 +72,18 @@
     v-model="valid"
     lazy-validation
   >
+    <v-select 
+        v-model="eventInput.id_department"
+
+        :items="tab_department"
+        filled
+        chips
+        color="blue-grey lighten-2"
+        label="Selectionner le departement"
+        item-text="department_name"
+        item-value="id" 
+      >
+        </v-select>
     
     <v-select v-if="user.is_admin"
         v-model="eventInput.id_type"
@@ -88,6 +100,9 @@
       
       >
         </v-select>
+
+
+
 
       <v-select v-if="user.is_teacher"
         v-model="eventInput.id_type"
@@ -140,7 +155,7 @@
   </v-select>
 
 
-   <v-text-field
+  <v-text-field
       v-model="eventInput.start"
    
       label="start"
@@ -154,8 +169,7 @@
       label="End"
       required
       type="datetime-local"
-    ></v-text-field>
-
+    ></v-text-field>   
 
 
      <v-select
@@ -360,7 +374,7 @@
     
     ...mapGetters('resources/course', ['tab_course_category']),
     ...mapGetters('resources/events', ['events','tab_type_events']),
-    ...mapGetters('resources/utils', ['events','tab_course', 'tab_level','tab_teacher', 'department_selected']),
+    ...mapGetters('resources/utils', ['tab_department','tab_course', 'tab_level','tab_teacher', 'department_selected']),
 
     get_type_for_teacher() {
 
@@ -376,6 +390,8 @@
             return this.dialogUpdate
             },
             set (value) {
+
+              console.log("encore avant dialog")
             this.setDialogUpdate()
             }
         }
@@ -408,12 +424,10 @@
        
 
         if (id_reservation == this.RESERVATION) {
-console.log("éééé true = ")
 
             return true
         }
         else {
-console.log("éééé false = ")
 
           return false
         }
@@ -433,7 +447,6 @@ console.log("éééé false = ")
         eventInput.id_department = this.department_selected
 
 
-        console.log(eventInput)
     
 
         if (true) {
@@ -446,9 +459,12 @@ console.log("éééé false = ")
 
 
                 eventInput.id_etat = 1 //etat valide
+                eventInput.type_reservation =this.eventInput.id_type
+
             }
             else if(this.user.is_teacher) {
                 eventInput.id_teacher = this.user.id
+                eventInput.type_reservation = this.RESERVATION
                 eventInput.id_etat =  this.ETAT_ATTENTE //etat en atttente de validation par secretaire
 
             }

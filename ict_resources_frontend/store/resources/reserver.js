@@ -65,6 +65,8 @@ export const mutations = {
 
 
     SET_DIALOG_UPDATE(state) {
+
+        console.log("dialog update is", state.dialogUpdate)
         state.dialogUpdate = !state.dialogUpdate
     },
 

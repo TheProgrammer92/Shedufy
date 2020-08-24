@@ -1,8 +1,7 @@
-
 <template>
   <v-row class="fill-height">
     <v-col>
-      <v-sheet height="64">
+      <v-sheet height="64" style="width:80%; margin:auto">
         <v-toolbar flat color="white">
           <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
             Today
@@ -46,12 +45,14 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet style="height:80vh">
+      <v-sheet height="750" style="width:80%; margin:auto">
         <v-calendar
           ref="calendar"
-          v-model="focus"
+          v-model="get_focus_calendar_notification"
+          :start= "get_focus_calendar_notification"
           color="primary"
-          :events="events"
+          :event-name="'message'"
+          :events="tab_event_selected"
           :event-color="getEventColor"
           :type="type"
           @click:event="showEvent"
@@ -103,16 +104,28 @@
     </v-col>
   </v-row>
 </template>
+
+
+
 <script>
 
-import {mapActions , mapGetters} from 'vuex'
-  export default {
-    layout:'layout-schedule-teacher',
-       middleware: 'teacher',
+import {mapActions, mapGetters} from 'vuex'
 
-    data: () => ({
-      focus: '',
-      type: 'week',
+  export default {
+        layout:'layout-sidebar',
+        transition:{
+          
+            mode:'out-in',
+            name:'bounce',
+            duration:5
+        },
+
+    data(){
+
+      return {
+
+        focus: '',
+      type: 'day',
       typeToLabel: {
         month: 'Month',
         week: 'Week',
@@ -122,19 +135,47 @@ import {mapActions , mapGetters} from 'vuex'
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
-    }),
 
-    computed:{
-  ...mapGetters('resources/events', [
-  'events'
-    ]),
+      }
     },
-    mounted () {
-      this.$refs.calendar.checkChange()
+   
+    async fetch() {
+
+      this.get_notification_id(this.$route.params.id)
+  
+
+
+
+
+
     },
+
+    fetchOnServer:false,
+
+    computed: {
+        ...mapGetters('resources/notifications', [ 'notification_selected','focus_calendar_notification']),
+        ...mapGetters('resources/events', ['tab_event_selected']),
+
+
+        get_focus_calendar_notification: {
+
+          get() {
+              return this.focus_calendar_notification
+          },
+
+          set(newValue) {
+              this.set_focus_calendar_notification(newValue)
+          }
+        }
+ 
+    },
+   
     methods: {
+      ...mapActions('resources/events',['getEventId']),
+      ...mapActions('resources/notifications',['get_notification_id' , 'set_focus_calendar_notification']),
+
+
+   
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
@@ -167,12 +208,28 @@ import {mapActions , mapGetters} from 'vuex'
 
         nativeEvent.stopPropagation()
       },
-     
-
-      },
+    
       rnd (a, b) {
         return Math.floor((b - a + 1) * Math.random()) + a
       },
 
+      get_selected() {
+
+          console.log("not select", this.notification_selected)
+      }
+    },
+
+    mounted() {
+
+    
+
+      
+
+      window.onload = this.get_selected
+
+    }
+
+   
   }
 </script>
+

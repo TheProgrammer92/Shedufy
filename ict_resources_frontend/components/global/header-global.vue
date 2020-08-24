@@ -31,20 +31,37 @@
         @click.stop="fixed = !fixed"
       >
         <v-icon>mdi-minus</v-icon>
+
       </v-btn>
-      <v-toolbar-title v-text="title" />
+
+          <nuxt-link to="/">
+            <v-toolbar-title v-text="title" />
+
+            </nuxt-link>
+
       <v-spacer />
 
-      <v-avatar color="indigo" size="25">
-        <v-icon dark>schedule</v-icon>
-      </v-avatar>
+
+      <nuxt-link v-if="user.is_teacher" :to="'/resources/schedule/teacher/'">  
+        <v-avatar color="indigo" size="25">
+          <v-icon dark>schedule</v-icon>
+        </v-avatar>
+      
+      </nuxt-link>
+   
 
 
 
 
-    <nuxt-link :to="'/resources/schedule/params'">
+    <nuxt-link :to="'/resources/schedule/params'"  @>
       <v-btn icon > <v-icon>settings</v-icon> </v-btn>     
-    </nuxt-link>
+    </nuxt-link> 
+    
+     
+      <v-btn icon   @click.prevent="print_docs()"> <v-icon>print</v-icon> </v-btn>     
+    
+    
+    
     
       <v-btn icon @click.prevent ="set_show_notification" > <v-icon>notifications</v-icon> </v-btn>  
 
@@ -53,7 +70,7 @@
       
         <v-btn
         icon
-        @click.stop="drawer = !drawer"
+        @click.prevent="set_drawer_sidebar_global"
       >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -100,7 +117,12 @@ export default {
 
   methods: {
       ...mapActions('resources/notifications',['set_show_notification' , 'get_notification_user_id']),
-               ...mapActions('utils/utils-global-view', ['set_clipped','set_drawer_left']),
+               ...mapActions('utils/utils-global-view', ['set_clipped','set_drawer_left' , 'set_drawer_sidebar_global']),
+
+               print_docs() {
+                  window.print()
+
+               }
 
   },
 

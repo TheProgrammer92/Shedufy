@@ -73,19 +73,12 @@ def verify_for_notification(request):
     user = User.objects.get(pk=request['id_user'])
 
     # si c'est une reservation creer par admin ou prof
-    print("okey il est admin")
-    print(request)
 
     if (request['type_reservation'] == RESERVATION) & user.is_teacher:
-
-        print("mixxx admin admin")
 
         # on va notifier tous les admin
 
         all_admin = User.objects.filter(is_admin=True)
-
-        print("c'est une resevation")
-        print(all_admin)
 
         for admin in all_admin:
             # recherchons le cours concerné
@@ -112,11 +105,9 @@ def verify_for_notification(request):
         if user.is_admin:
             teacher = User.objects.get(pk=request['id_teacher'])
 
-            message = "L'adminnistrateur " + user.email + "  vous a ajouté au cours  "
             course = Course.objects.get(pk=request['id_course'])
 
             date = get_date_and_time_by_id(request['pk'])
-
 
             message = """L'administrateur   %s a ajouté une réservation 
                         pour le cours %s(%s)  qui serra le %s de %s 

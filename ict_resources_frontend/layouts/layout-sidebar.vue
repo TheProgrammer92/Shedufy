@@ -5,12 +5,11 @@
 
   <!-- left navigation -->
      
-      <sidebar-schedule></sidebar-schedule>
 
  
     <header-global></header-global>
 
-    <sidebar-global ></sidebar-global>
+<sidebar-global></sidebar-global>
     <!-- main -->
     <v-main>
       <v-container fluid>
@@ -22,8 +21,7 @@
       :fixed="fixed"
       app
     >
-      <span><h2>dsfds</h2>
-  {{ new Date().getFullYear() }}</span>
+      <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -32,34 +30,28 @@
 
 import {mapActions,mapGetters} from 'vuex'
 
-import facade from '~/plugins/mixins/facade.js'
-import sidebarSchedule from '~/components/global/sidebar-schedule'
 import headerGlobal from '~/components/global/header-global'
 import sidebarGlobal from '~/components/global/sidebar-global'
 
-
 import Vue from 'vue'
 
-Vue.mixin(facade)
+
 export default {
+
 
   auth: true,
 
-  transition:{
-  name: 'layout',
-  mode: 'out-in'
-},
-
-  components: {headerGlobal,sidebarSchedule ,sidebarGlobal},
-  loading: true,
+  components: {headerGlobal,sidebarGlobal},
 
   data () {
     
     return {
-    
-   
-         fixed:true,
+      drawer: false,
+      fixed: false,
+      drawer_left:true,
+      selected_actors:"",
 
+       
       items_left: [
         {
           id: 1,
@@ -67,7 +59,10 @@ export default {
           
         }],
      
-    
+      
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
       title: 'MyResource4D'
     }
   },
@@ -84,28 +79,16 @@ export default {
 
   
 
-  async fetch() {
 
-    
+
+    async fetch() {
+
+      console.log(this.$route.params.id)
 
     //verification s'il est admin pour le selectionner
 
     let params ={}
-    if(this.user.is_admin) {
-       params.what_action ="admin"
-       params.id_user=this.user.id
-
-       
-       this.getDepartmentFilierLevelId(params)
-
-
-    }
-    else {
-      
-          this.getAllDepartment()
-
-    }
-
+    
 
 
        this.getClasses()
@@ -118,10 +101,12 @@ export default {
       this.getTypeEvent()
 
 
-    
+    this.get_notification_id(this.$route.params.id)
+
 
       
   },
+
 
   fetchOnServer: false,
 
@@ -145,37 +130,16 @@ export default {
      ...mapActions('resources/utils', ['getDepartmentFilierLevelId','getAllDepartment',
      'set_salle','set_filiere','set_type_schedule',
      'set_level','set_cours' , 'set_by_type']),
-      ...mapActions('resources/notifications',['get_notification_user_id']),
+      ...mapActions('resources/notifications',['get_notification_user_id','get_notification_id']),
+      ...mapActions('utils/utils-global-view',['set_drawer_sidebar_global','set_direct_value_drawer_sidebar_global']),
 
  
-
-   async  logout() {
-
-      let data_refresh = {
-
-        refresh_token:  this.$auth.$storage.getLocalStorage("refresh_token")
-      }
-
-
-          let res= await  this.$auth.logout({data: data_refresh})
-
-      this.$router.push({name: 'auth-login'})
-
-
-
-    }, 
 
 
     
   },
 
   mounted() {
-
-    this.$nextTick(() => {
-      this.$nuxt.$loading.start()
-
-      setTimeout(() => this.$nuxt.$loading.finish(), 500)
-    })
   }
 
 

@@ -11,7 +11,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
         fields = ['id_course', 'start', 'end', 'id_level', 'id_classe', 'pk', 'id_teacher', 'type_reservation',
-                  'id_type', 'id_etat', 'id_user']
+                  'id_type', 'id_etat', 'id_user' , 'id_department']
 
 
 class NotificationSerializer(serializers.ModelSerializer):
