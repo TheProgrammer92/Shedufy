@@ -1,7 +1,8 @@
+asgiref==3.2.10
 appdirs==1.4.3
-asgiref==3.2.7
 distlib==0.3.0
 Django==3.0.5
+django-jazzmin
 django-cors-headers==3.2.1
 django-debug-toolbar==2.2
 django-templated-mail==1.1.1
@@ -17,3 +18,10 @@ six==1.14.0
 sqlparse==0.3.1
 virtualenv==20.0.15
 zipp==3.1.0
+
+rest_social_auth
+django-anymail[mailgun]
+django_seed
+django_q
+django-data-seeder
+social-auth-app-django

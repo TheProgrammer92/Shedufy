@@ -56,6 +56,7 @@ export default {
         '~/plugins/mixins/user',
         '~/plugins/vue/vueTextareaAutosize',
         '~/plugins/vue/main.js',
+        '~/plugins/vue/vue-notify',
 
     ],
 
@@ -125,6 +126,14 @@ export default {
             },
 
 
+
+        },
+        cookie: {
+
+            options: {
+                path: '/',
+                expires: 1555555555555555555555555555555555555555555555555555555555
+            }
         }
     },
 

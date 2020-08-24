@@ -1,29 +1,41 @@
 from django.urls import include, path
 from rest_framework import routers
-from myresources.views.views import *
 
-from myresources.views.views import *
-from myresources.views.viewsets import *
+from myresources.views.CourseView import *
+from myresources.views.ClasseView import *
+from myresources.views.ScheduleView import *
+# from myresources.views.ReservationScheduleView import *
+from myresources.views.EquipmentView import *
+from myresources.views.DepartmentView import *
+from myresources.views.ReservationView import *
+from myresources.views.NotificationsView import *
+
 router = routers.DefaultRouter()
 
 router.register(r'resources', ScheduleViewset)
 
-
-
-
+router.register(r'equipment', EquipmentViewset)
+router.register(r'reservationschedule', ReservationViewset)
+router.register(r'notifications', NotificationsViewset)
 
 urlpatterns = [
+
     path('', include(router.urls)),
     path('', include('djoser.urls')),
     path('', include('djoser.urls.jwt')),
-    path('user/all/', MeListView.as_view(), name="user-list"),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('getCategoryClasse/', CategoryClassView.as_view()),
+    path('getClasseCategoryId/<int:pk>/', CategoryClasseGetId.as_view()),
+    path('getClasse/', ClasseView.as_view()),
+    path('getDepartmentFilierLevelId/<int:pk>/', getDepartmentFilierLevelId.as_view()),
+    path('getAllDepartment/', getAllDepartment.as_view()),
+    path('TypeScheduleView/', TypeScheduleView.as_view()),
+    path('getCategorieNotification/', CategorieNotificationView.as_view()),
 
-    path("all-profiles/", UserProfileListCreateView.as_view(), name="all-profiles"),
-    # retrieves profile details of the currently logged in user
-    path("profile/<int:pk>/", userProfileDetailView.as_view(), name="profile"),
-    path("blacklist/", LogoutAndBlacklistRefreshTokenForUserView.as_view(), name='blacklist'),
+    # course
 
+    path('getCourse/', GetCourse.as_view()),
+    path('getCategoryCourse/', GetCategoryCourse.as_view()),
+
+    ##reservation
 
 ]
-

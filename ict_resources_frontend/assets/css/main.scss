@@ -1,6 +1,17 @@
-
+@import "./framework/animate.css";
 @import "./partials/variable.scss";
 @import "./auth/main-auth.scss";
 @import "./auth/auth.scss";
 @import "./auth/pages/MainLogin";
-@import "./auth/pages/MainRegister"
+@import "./auth/pages/MainRegister";
+@import "~vue-snotify/styles/material";
+@import "~pretty-checkbox/src/pretty-checkbox.scss";
+.layout-enter-active,
+.layout-leave-active {
+    transition: opacity .1s
+}
+
+.layout-enter,
+.layout-leave-active {
+    opacity: 0
+}

@@ -39,11 +39,12 @@ export default {
 
         eventInput: {
 
-          name: '',
+          id_course: '',
           color: '#1976D2',
-          details :"",
           start: "",
-          end: ""
+          end: "",
+          id_equipment:"",
+          id_classe:''
         }
     }
   },
@@ -59,12 +60,8 @@ export default {
     
   },
   methods: {
-    ...mapActions('resources/reserver', [
-      
-      'setDialogDate', 'addEvent','setDialog'
-
-
-    ]),
+    ...mapActions('resources/reserver', ['setDialogDate', 'setDialog']),
+  ...mapActions('resources/events', ['addEvent']),
 
     addNewEvent:function() {
 

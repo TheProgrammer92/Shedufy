@@ -1,104 +1,78 @@
-import { nth, monthFormatter } from "./reserver.func.js"
-
 export const state = () => ({
 
 
-    events: [],
+
     dialog: false,
     dialogDate: false,
+    dialogUpdate: false,
 
 
-    eventInput: {
-        name: "",
-        details: "",
-        start_date: "",
-        color: "#1976D2",
-        end_date: ""
-    }
+
+
+    tab_reservation_valid: [],
+    tab_reservation_refus: [],
+    tab_reservation_attente: [],
+    tab_reservation_annulle: [],
 })
 
 
 export const mutations = {
+    async GET_ALL_RESERVATION_SCHEDULE(state) {
+
+        let data = (await this.$axios.get('api/reservationschedule/')).data
 
 
-    async GET_EVENTS(state) {
-
-        console.log("call get Event")
-
-        let data = (await this.$axios.get('api/resources/')).data
-        state.events = []
-        let dataEach = data.data
+        state.tab_reservation_valid = []
+        state.tab_reservation_refus = []
+        state.tab_reservation_attente = []
+        state.tab_reservation_annulle = []
 
 
-        dataEach.forEach(element => {
 
-            state.events.push(element)
-        })
+        //on recupere les type de reservation
+        state.tab_reservation_valid = data.reservation_valid
+        state.tab_reservation_refus = data.reservation_refus
+        state.tab_reservation_attente = data.reservation_attente
+        state.tab_reservation_annulle = data.reservation_annulle
 
 
-        console.log("event = ", state.events)
+
+    },
+    async GET_ALL_RESERVATION_SCHEDULE_TEACHER(state, id_teacher) {
+
+
+
+
+        let data = (await this.$axios.get('api/reservationschedule/' + id_teacher + '/')).data
+        state.tab_reservation_valid = []
+        state.tab_reservation_refus = []
+        state.tab_reservation_attente = []
+        state.tab_reservation_annulle = []
+
+
+
+        //on recupere les type de reservation
+        state.tab_reservation_valid = data.reservation_valid
+        state.tab_reservation_refus = data.reservation_refus
+        state.tab_reservation_attente = data.reservation_attente
+        state.tab_reservation_annulle = data.reservation_annulle
+
+
 
     },
 
-    async ADD_EVENT(state, eventInput) {
 
 
 
-        console.log("demare event", eventInput)
-        if (eventInput.name && eventInput.start && eventInput.end && eventInput.details) {
-            let data = (await this.$axios.post('api/resources/', eventInput)).data
+    SET_DIALOG_UPDATE(state) {
 
-            //   state.getEvents()
-
-            let resources = (await this.$axios.get('api/resources/')).data
-            state.events = []
-            let dataEach = resources.data
-
-
-            dataEach.forEach(element => {
-
-                state.events.push(element)
-            })
-
-
-
-
-        } else {
-            alert('You must enter event name, start, and end time')
-        }
-    },
-
-    async UPDATE_EVENT(state, ev) {
-        await db.collection('calEvent').doc(this.currentlyEditing).update({
-            details: ev.details
-        })
-        this.selectedOpen = false,
-            this.currentlyEditing = null
-    },
-    async DELETE_EVENT(state, ev) {
-        await db.collection("calEvent").doc(ev).delete()
-        this.selectedOpen = false,
-            this.getEvents()
-    },
-    SHOW_EVENT(state, { nativeEvent, event }) {
-        const open = () => {
-            this.selectedEvent = event
-            this.selectedElement = nativeEvent.target
-            setTimeout(() => this.selectedOpen = true, 10)
-        }
-        if (this.selectedOpen) {
-            this.selectedOpen = false
-            setTimeout(open, 10)
-        } else {
-            open()
-        }
-        nativeEvent.stopPropagation()
+        console.log("dialog update is", state.dialogUpdate)
+        state.dialogUpdate = !state.dialogUpdate
     },
 
 
     SET_DIALOG_DATE(state, date) {
 
-        console.log("set me dialog date")
         state.dialogDate = true
         state.focus = date
     },
@@ -117,16 +91,10 @@ export const mutations = {
 }
 
 export const actions = {
+    setDialogUpdate({ commit }) {
 
-    getEvents({ commit }) {
-        commit('GET_EVENTS')
+        commit('SET_DIALOG_UPDATE')
     },
-    addEvent({ commit }, eventInput) {
-        commit('ADD_EVENT', eventInput)
-        commit('GET_EVENTS')
-    },
-
-
 
 
     setDialogDate({ commit }, date) {
@@ -141,6 +109,24 @@ export const actions = {
 
 
 
+    //reservation
+
+    getAllReservationSchedule({ commit }) {
+
+        commit("GET_ALL_RESERVATION_SCHEDULE")
+
+    },
+
+    getAllReservationScheduleTeacher({ commit }, id_teacher) {
+
+        commit("GET_ALL_RESERVATION_SCHEDULE_TEACHER", id_teacher)
+
+    },
+
+
+
+
+
 
 
 }
@@ -149,12 +135,15 @@ export const actions = {
 export const getters = {
 
 
-    events: state => state.events,
-    details: state => state.details,
-    dialogDate: state => state.dialogDate,
 
     dialog: state => state.dialog,
+    dialogUpdate: state => state.dialogUpdate,
+    dialogDate: state => state.dialogDate,
+    tab_reservation_valid: state => state.tab_reservation_valid,
+    tab_reservation_refus: state => state.tab_reservation_refus,
+    tab_reservation_attente: state => state.tab_reservation_attente,
+    tab_reservation_annulle: state => state.tab_reservation_annulle,
 
-    eventInput: state => state.eventInput
+
 
 }

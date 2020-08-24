@@ -1,3 +1,14 @@
+****COMMENT UTILISER L'APPLICATION***
+
+1: Apres , avoir, suivis, toute les Etape ci dessous et lancé l'application 
+2: Se connecter a l'admin a , l'address   http://localhost:8000/admin 
+3: creer des classe dans l'admin , et des materiel (equipement)
+4: Creer un compte  a l'address http://localhost:3000/auth/register
+5: Se connecter 
+6: Aller a cette page http://localhost:3000/resources/classe
+7: cliquer sur New Event et creer un emploie de temps
+8: Vous verrez quelque photo de l'application dans le dossier  ***PHOTO**** 
+
 
 *********BACK-END***
 
@@ -19,13 +30,15 @@ $  python -m pip install virtualenvwrapper-win
 $ python -m pip install Django
 
 # Install package django  in virtual environment
-$ pip install   rest_framework djoser corsheaders corsheaders 
+$ pip install -r requirements.txt
 
 
-# run migration
-
-$ python manage.py makemigrations
-$ python manage.py migrate
+# run migration for all applicatioin
+$ python manage.py makemigrations myresources
+$ python manage.py makemigrations myresources_profil
+$ python manage.py migrate 
+$ python manage.py migrate myresources
+$ python manage.py migrate myresources_profil
 
 
 ##For admin management

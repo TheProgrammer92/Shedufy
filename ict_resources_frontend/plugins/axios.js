@@ -6,6 +6,8 @@ export default function({ $axios, store, redirect }) {
     })
 
     $axios.onError(error => {
+
+
         const code = parseInt(error.response && error.response.status)
 
         if (error.response.data) {
@@ -15,7 +17,7 @@ export default function({ $axios, store, redirect }) {
         }
 
 
-        console.log("errur on errors", error.response)
+
         if (code === 400) {
             // redirect('/400')
         }
@@ -28,5 +30,17 @@ export default function({ $axios, store, redirect }) {
 
 
         return Promise.reject(error);
+    })
+
+    $axios.onResponse(response => {
+
+
+
+
+        if (response.config.url === "/api/users/me/") {
+
+
+
+        }
     })
 }

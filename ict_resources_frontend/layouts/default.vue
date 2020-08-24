@@ -1,158 +1,153 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-
-          @click.prevent="item.isLogout ? logout: null"
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content v-if="item.isLogout">
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-
-          <v-list-item-content v-if="!item.isLogout">
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-
-      <v-list>
-        <v-list-item
-
-          router
-          exact
-
-          @click.prevent="logout"
-        >
-          <v-list-item-action>
-            <v-icon>mdi-chart-bubble</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="'Se deconnecter'" />
-          </v-list-item-content>
-
-
-        </v-list-item>
-      </v-list>
+  <v-app >
 
 
 
-    </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-    <v-content>
-      <v-container>
+  <!-- left navigation -->
+     
+      <sidebar-schedule></sidebar-schedule>
+
+ 
+    <header-global></header-global>
+
+    <sidebar-global ></sidebar-global>
+    <!-- main -->
+    <v-main>
+      <v-container fluid>
         <nuxt />
       </v-container>
-    </v-content>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    </v-main>
+   
     <v-footer
       :fixed="fixed"
       app
     >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <span><h2>dsfds</h2>
+  {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+
+import {mapActions,mapGetters} from 'vuex'
+
+import facade from '~/plugins/mixins/facade.js'
+import sidebarSchedule from '~/components/global/sidebar-schedule'
+import headerGlobal from '~/components/global/header-global'
+import sidebarGlobal from '~/components/global/sidebar-global'
+
+
+import Vue from 'vue'
+
+Vue.mixin(facade)
 export default {
 
   auth: true,
-  data () {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
-        },
-        {
-          icon: 'mdi-chart-bubble',
-          title: 'Accueil',
-          to: '/inspire'
-        },
 
-        
-        
+  transition:{
+  name: 'layout',
+  mode: 'out-in'
+},
+
+  components: {headerGlobal,sidebarSchedule ,sidebarGlobal},
+  loading: true,
+
+  data () {
+    
+    return {
+    
+   
+         fixed:true,
+
+      items_left: [
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Reservation',
-          to: '/resources/reserver_schedule'
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'MyResource'
+          id: 1,
+          name: 'Paramettre generaux',
+          
+        }],
+     
+    
+      title: 'MyResource4D'
     }
   },
 
+   head () {
+    return {
+      title:"TheProgrammer Default page",
+      meta: [
+        // hid est utilisé comme identifiant unique. N'utilisez pas `vmid` car ça ne fonctionnera pas
+        { hid: 'description', name: 'description', content: 'Ma description personnalisée' }
+      ]
+    }
+  },
+
+  
+
+  async fetch() {
+
+    
+
+    //verification s'il est admin pour le selectionner
+
+    let params ={}
+    if(this.user.is_admin) {
+       params.what_action ="admin"
+       params.id_user=this.user.id
+
+       
+       this.getDepartmentFilierLevelId(params)
+
+
+    }
+    else {
+      
+          this.getAllDepartment()
+
+    }
+
+
+
+       this.getClasses()
+      this.getAllUser()
+       this.getAllCourse()
+
+     this.getAllCategoryClasse()
+       this.getCourse()
+
+      this.getTypeEvent()
+
+
+    
+
+      
+  },
+
+  fetchOnServer: false,
+
+  computed: {
+
+    ...mapGetters('resources/events', ['tab_type_events']),
+  ...mapGetters('resources/utils', ['tab_filiere' ,'tab_department' ,
+   'tab_level', 'tab_course','cours_selected','level_selected', 
+   'salle_selected','filiere_selected',
+    'type_schedule_selected','department_selected' , 'by_type_selected' , ]),
+
+
+  },
   methods: {
+    ...mapActions('resources/reserver', ['getAllReservationSchedule',]),
+     ...mapActions('resources/classes', ['getClasses','getAllCategoryClasse']),
+     ...mapActions('resources/equipment',['getEquipments']),
+     ...mapActions('resources/course',['getAllCourse','getCourse']),
+    ...mapActions('users/profil', ['getAllUser']),
+    ...mapActions('resources/events', ['getTypeEvent','getEvents']),
+     ...mapActions('resources/utils', ['getDepartmentFilierLevelId','getAllDepartment',
+     'set_salle','set_filiere','set_type_schedule',
+     'set_level','set_cours' , 'set_by_type']),
+      ...mapActions('resources/notifications',['get_notification_user_id']),
+
+ 
 
    async  logout() {
 
@@ -168,13 +163,20 @@ export default {
 
 
 
-    }
+    }, 
+
+
+    
   },
- mounted() {
 
- }
+  mounted() {
 
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
 
+      setTimeout(() => this.$nuxt.$loading.finish(), 500)
+    })
+  }
 
 
 }
