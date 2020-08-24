@@ -4,12 +4,12 @@
  
 
    <v-container fluid>
+
+   
     <v-row justify="center">
-      <v-subheader>Reservation valid</v-subheader>
        <notification-component :tab_notification="tab_notification" ></notification-component>
 
          <br><br>
-         <v-subheader  >Rerservation échoué</v-subheader>
 
 
     </v-row>

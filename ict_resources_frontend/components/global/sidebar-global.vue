@@ -132,7 +132,7 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'Reservation',
-          to: '/resources/reservation/index-teacher',
+          to: '/reservation/index-teacher',
           type_is_show:"guest"
           
         } 

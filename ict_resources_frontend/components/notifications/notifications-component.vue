@@ -1,5 +1,5 @@
 <template>
-    <v-expansion-panels popout>
+    <v-expansion-panels popout style="width:80%">
 
         <v-expansion-panel
           v-for="(notification, i) in tab_notification"
@@ -84,8 +84,9 @@ salut              </v-col>
               <v-btn 
               class="pl-0" text small color="primary">vue</v-btn>
 
-              <v-btn class="pl-0" text small color="error"
-              >Non vue</v-btn>
+
+         <v-btn @click.prevent="goToNotify(notification)" class="pl-0" text small color="error"
+              >Afficher</v-btn>
             </div>
 
      
@@ -132,7 +133,16 @@ export default {
 
      methods: {
 
-      
+     ...mapActions('resources/notifications',['set_notification_selected']),
+
+
+       goToNotify(notify) {
+
+
+          this.set_notification_selected(notify)
+
+          this.$router.push({ path: `/notifications/${notify.id}` }) // -> /user/123
+       }
    
   },
 

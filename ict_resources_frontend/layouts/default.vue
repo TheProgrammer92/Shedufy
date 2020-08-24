@@ -22,7 +22,7 @@
       :fixed="fixed"
       app
     >
-      <span><h2>dsfds</h2>
+      <span>
   {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
